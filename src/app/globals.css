@@ -26,3 +26,13 @@
 } */
 
 
+@theme {
+  --color-navy: #0047AB;
+  --color-navy-hover: #0059CC;
+  --color-secondary: #e0e0e0;
+  --color-secondary-hover: #d1d0d0;
+  --color-navy-dark: #264673;
+  --color-stone: #f3f5f6;
+  --color-stone-dark: #627084;
+  --color-glass: #d1d7e0;
+}

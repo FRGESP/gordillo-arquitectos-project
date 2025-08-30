@@ -39,19 +39,19 @@ function Hero() {
                     <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center justify-center">
                         <Link
                             href="#projects"
-                            className="inline-flex items-center justify-center rounded-lg bg-blue-800 px-5 py-3 text-white font-semibold shadow-lg shadow-blue-900/20 hover:bg-blue-700 transition-colors"
+                            className="inline-flex text-xl items-center justify-center rounded-xl bg-navy px-5 py-3 text-white font-bold shadow-lg shadow-blue-900/20 hover:bg-navy-hover hover:text-white transition-colors"
                         >
-                            Ver proyectos
-                            <ArrowRight className="ml-2 h-5 w-5" />
+                            Contáctanos
+                            <ArrowRight className="ml-2 h-6 w-6" />
                         </Link>
-                        <a
+                        {/* <a
                             href="https://wa.me/1234567890"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-semibold bg-white/10 text-white ring-1 ring-white/30 hover:bg-white/20 transition-colors"
+                            className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-semibold bg-secondary text-white ring-1 ring-white/30 hover:bg-secondary-hover transition-colors"
                         >
                             Solicita una cotización
-                        </a>
+                        </a> */}
                     </div>
 
                     <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-xl text-white mx-auto text-center">

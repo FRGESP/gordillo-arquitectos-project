@@ -57,7 +57,7 @@ function ServicesGrid() {
             description: "Diseñamos y ejecutamos obras de urbanización que mejoran la conectividad y calidad de vida en cada comunidad.",
             CTA: "Cotizar Desarrollo",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/urbanizacion.jpg"
+            bg: "/assets/images/urbanizacionPrev.webp"
         },
         {
             category: "Muebles a Medida",
@@ -83,7 +83,7 @@ function ServicesGrid() {
             description: "Compra, venta y renta de propiedades. Te ayudamos a vender tu inmueble con promoción efectiva y asesoría personalizada.",
             CTA: "Ver propiedades",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/interiorPipila.jpg"
+            bg: "/assets/images/pipila.webp"
         },
         {
             category: "Mantenimiento",
@@ -105,7 +105,7 @@ function ServicesGrid() {
         <section id="services" className='scroll-mt-20 bg-gray-50'>
             {/* Header */}
             <div className='container mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-20 pb-6 text-center'>
-                <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">Servicios que impulsan tus proyectos</h2>
+                <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy">Servicios que impulsan tus proyectos</h2>
             </div>
 
             {/* Mobile version */}
@@ -113,7 +113,7 @@ function ServicesGrid() {
                 <div className='container mx-auto'>
                     {/* Section Header */}
                     <div className='text-center mb-16'>
-                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        <p className="text-xl text-black max-w-2xl mx-auto">
                             Descubre nuestra amplia gama de servicios profesionales diseñados para cubrir
                             todas sus necesidades de construcción y diseño.
                         </p>
@@ -134,25 +134,25 @@ function ServicesGrid() {
                                         fill
                                         className="object-cover"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-                                    <div className="absolute bottom-3 left-3 flex items-center space-x-2">
-                                        <service.icon className={`w-8 h-8 text-white`} />
-                                        <h3 className="text-2xl font-bold text-white tracking-wide">
-                                            {service.category}
-                                        </h3>
-                                    </div>
+
                                 </div>
 
                                 {/* Card Body */}
                                 <div className='p-6 flex flex-col justify-between flex-1'>
-                                    <div className="">
-                                        <p className="text-gray-600 text-base md:text-lg mb-5 leading-relaxed">
+                                    <div className="space-y-4">
+                                        <div className="flex items-center space-x-2">
+                                            <service.icon className={`w-8 h-8 text-navy`} />
+                                            <h3 className="text-2xl font-bold text-navy tracking-wide">
+                                                {service.category}
+                                            </h3>
+                                        </div>
+                                        <p className="text-gray-600 text-base md:text-lg leading-relaxed">
                                             {service.description}
                                         </p>
                                         <ul className='space-y-3'>
                                             {service.services.map((item, itemIndex) => (
                                                 <li key={itemIndex} className='flex items-start space-x-3'>
-                                                    <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${service.gradient} mt-2 flex-shrink-0`}></div>
+                                                    <div className={`w-2 h-2 rounded-full bg-navy mt-2 flex-shrink-0`}></div>
                                                     <span className='text-gray-700 font-medium'>{item}</span>
                                                 </li>
                                             ))}
@@ -160,9 +160,12 @@ function ServicesGrid() {
                                     </div>
 
                                     {/* Call to Action */}
-                                    <div className='mt-2 pt-6 border-t border-gray-100'>
-                                        <button className={`w-full bg-gradient-to-r ${service.gradient} text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 cursor-pointer`} onClick={() => { console.log(`Solicitar información para ${service.category}`) }}>
+                                    <div className='mt-2 pt-6 border-t border-gray-100 space-y-2'>
+                                        <button className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer`} onClick={() => { console.log(`Solicitar información para ${service.category}`) }}>
                                             {service.CTA}
+                                        </button>
+                                        <button className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer`} onClick={() => { console.log(`Solicitar información para ${service.category}`) }}>
+                                            Más información
                                         </button>
                                     </div>
                                 </div>

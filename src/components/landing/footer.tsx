@@ -20,9 +20,9 @@ function Footer() {
     ]
 
     const contactInfo = [
-        { icon: <MapPin />, text: "Pípila 706, Moroleón, Gto." },
-        { icon: <Phone />, text: "445 450 3606" },
-        { icon: <Mail />, text: "fernandogordilloortega@gmail.com" }
+        { icon: <MapPin className='text-navy'/>, text: "Pípila 706, Moroleón, Gto." },
+        { icon: <Phone className='text-navy'/>, text: "445 450 3606" },
+        { icon: <Mail className='text-navy'/>, text: "fernandogordilloortega@gmail.com" }
     ]
 
     return (
@@ -95,7 +95,7 @@ function Footer() {
                 <div className="border-t border-gray-200 pt-6 mt-10">
                     <div className='flex justify-center flex-col md:flex-row md:space-x-2 text-gray-500  text-center'>
                         <p>© 2025 Gordillo Arquitectos.</p>
-                        <p className=''>Desarrollado por <a href="https://blackwaves.tech" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'>Blackwaves</a>.</p>
+                        <p className=''>Desarrollado por <a href="https://blackwaves.tech" target="_blank" rel="noopener noreferrer" className='text-navy hover:underline'>Blackwaves</a>.</p>
                     </div>
                 </div>
             </div>

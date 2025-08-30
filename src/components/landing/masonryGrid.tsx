@@ -122,7 +122,7 @@ function MasonryGrid() {
                 </div>
                 {!isExpanded ? (
                     <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-50 to-transparent text-center p-4'>
-                        <button className='inline-flex items-center gap-2 text-white font-semibold px-3 py-2 bg-blue-700 rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:scale-105' onClick={() => setIsExpanded(true)}>
+                        <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-secondary rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:scale-105' onClick={() => setIsExpanded(true)}>
                             <span>Ver más</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M6 9l6 6 6-6" />

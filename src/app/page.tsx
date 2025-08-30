@@ -14,6 +14,7 @@ function Landing() {
       <Navbar />
       <Hero />
       <ServicesGrid />
+      <Process />
       <Whatsapplink />
       <Projects />
       <ContactImage />
