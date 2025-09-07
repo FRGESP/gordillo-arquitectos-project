@@ -6,6 +6,9 @@ interface LinkUnderlineProps {
   children: ReactNode
   className?: string
   scrolledProp?: boolean
+  personalized?: boolean
+  color?: string
+  blank?: boolean
 }
 
 const LinkUnderline: React.FC<LinkUnderlineProps> = ({
@@ -13,13 +16,17 @@ const LinkUnderline: React.FC<LinkUnderlineProps> = ({
   children,
   className = "",
   scrolledProp = false,
+  personalized = false,
+  color = "black",
+  blank = false
 }) => {
   return (
     <a
       href={href}
+      target={blank ? "_blank" : "_self"}
       className={`
-        ${scrolledProp ? 'text-black after:bg-black' : 'text-white after:bg-white'}
-        relative inline-block cursor-pointer font-semibold
+        ${personalized ? `text-${color} after:bg-black` : scrolledProp ? 'text-black after:bg-black font-semibold' : 'text-white after:bg-white font-semibold'}
+        relative inline-block cursor-pointer 
         after:content-[''] after:absolute after:bottom-0
         after:h-[2px] 
         after:transition-all after:duration-300

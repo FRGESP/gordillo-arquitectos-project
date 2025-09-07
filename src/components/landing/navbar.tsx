@@ -2,17 +2,23 @@
 import { useEffect, useState } from 'react';
 import { InstagramLogo, FacebookLogo, WhatsappLogo, List, X } from 'phosphor-react';
 import LinkUnderline from '../elements/linkUnderline';
+import { usePathname } from 'next/navigation';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+      if (pathname === '/') {
+        const onScroll = () => setScrolled(window.scrollY > 10);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => window.removeEventListener('scroll', onScroll);
+      } else {
+        setScrolled(true);
+      }
+    }, [pathname]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -179,7 +185,7 @@ function Navbar() {
               </div>
             </div>
             <div className='flex-1'
-            onClick={() => setMenuOpen(false)}
+              onClick={() => setMenuOpen(false)}
             >
             </div>
           </div>

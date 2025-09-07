@@ -108,12 +108,11 @@ function ServicesGrid() {
                 <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy">Servicios que impulsan tus proyectos</h2>
             </div>
 
-            {/* Mobile version */}
             <div className="px-4 sm:px-6 lg:px-8 bg-gray-50">
                 <div className='container mx-auto'>
                     {/* Section Header */}
                     <div className='text-center mb-16'>
-                        <p className="text-xl text-black max-w-2xl mx-auto">
+                        <p className="text-lg md:text-xl text-black max-w-2xl mx-auto">
                             Descubre nuestra amplia gama de servicios profesionales diseñados para cubrir
                             todas sus necesidades de construcción y diseño.
                         </p>

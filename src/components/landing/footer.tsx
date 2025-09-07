@@ -1,6 +1,7 @@
 'use client';
 import { InstagramLogo, FacebookLogo, WhatsappLogo } from 'phosphor-react';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import LinkUnderline from '../elements/linkUnderline';
 
 function Footer() {
 
@@ -20,9 +21,9 @@ function Footer() {
     ]
 
     const contactInfo = [
-        { icon: <MapPin className='text-navy'/>, text: "Pípila 706, Moroleón, Gto." },
-        { icon: <Phone className='text-navy'/>, text: "445 450 3606" },
-        { icon: <Mail className='text-navy'/>, text: "fernandogordilloortega@gmail.com" }
+        { icon: MapPin, text: 'Pípila 706, Moroleón Gto.', href: 'https://maps.app.goo.gl/gGrwqi2FtsUs3kzr6', title: "Dirección" },
+        { icon: Phone, text: '4454503606', href: 'tel:4454503606', title: "Teléfono" },
+        { icon: Mail, text: 'fernandogordilloortega@gmail.com', href: 'mailto:fernandogordilloortega@gmail.com', title: "Correo" },
     ]
 
     return (
@@ -83,8 +84,10 @@ function Footer() {
                         <ul className="space-y-4 text-gray-600">
                             {contactInfo.map((info) => (
                                 <li key={info.text} className="flex items-center">
-                                    <span className="text-gray-500">{info.icon}</span>
-                                    <p className="ml-3">{info.text}</p>
+                                    {/* <span className="text-gray-500">{info.icon}</span> */}
+                                    {/* <p className="ml-3 break-all">{info.text}</p> */}
+                                    <info.icon size={22} className="text-navy" />
+                                    <LinkUnderline blank={true} href={info.href} personalized={true} color='gray-600' className='ml-3 break-after-all'>{info.text}</LinkUnderline>
                                 </li>
                             ))}
                         </ul>

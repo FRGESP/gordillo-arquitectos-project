@@ -29,8 +29,8 @@ function Process() {
     <div className="bg-gray-50">
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-20 pb-6'>
         <div className='text-center mb-16'>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy text-center mb-6">Nuestro Proceso</h2>
-          <p className="text-xl text-black max-w-2xl mx-auto">
+          <h2 className="mt-3 text-4xl md:text-5xl font-bold text-navy text-center mb-6">Nuestro Proceso</h2>
+          <p className="text-lg md:text-xl text-black max-w-2xl mx-auto">
             Un enfoque metodológico que garantiza resultados excepcionales en cada etapa del proyecto
           </p>
         </div>
