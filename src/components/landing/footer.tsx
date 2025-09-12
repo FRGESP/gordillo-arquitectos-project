@@ -12,12 +12,12 @@ function Footer() {
     ];
 
     const services = [
-        "Proyectos",
-        "Construcción",
-        "Urbanización",
-        "Muebles a medida",
-        "Bienes Raíces",
-        "Mantenimiento"
+        ["Proyectos", "/proyectos"],
+        ["Construcción", "/construccion"],
+        ["Urbanización", "/urbanizacion"],
+        ["Muebles a medida", "/muebles-a-medida"],
+        ["Bienes Raíces", "/inmobiliaria"],
+        ["Mantenimiento", "/mantenimiento"]
     ]
 
     const contactInfo = [
@@ -69,8 +69,8 @@ function Footer() {
                         </h4>
                         <ul className="grid grid-cols-2 gap-y-3">
                             {services.map((service) => (
-                                <li key={service} className="text-gray-600 hover:text-gray-900 transition-colors">
-                                    {service}
+                                <li key={service[0]} className="text-gray-600 hover:text-gray-900 transition-colors">
+                                    <LinkUnderline href={service[1]} personalized={true} color='gray-600'>{service[0]}</LinkUnderline>
                                 </li>
                             ))}
                         </ul>

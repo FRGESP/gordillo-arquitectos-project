@@ -32,9 +32,9 @@ function Navbar() {
 
   const navItems = [
     { name: 'Inicio', href: '/' },
-    { name: 'Servicios', href: '/services' },
-    { name: 'Proyectos', href: '/projects' },
-    { name: 'Inmobiliaria', href: '/inmobiliaria' },
+    { name: 'Servicios', href: '/#servicios' },
+    { name: 'Proyectos', href: '/#proyectos' },
+    { name: 'Inmobiliaria', href: '/#' },
   ];
 
   const socialLinks = [

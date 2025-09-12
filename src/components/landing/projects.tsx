@@ -2,7 +2,7 @@ import MasonryGrid from "./masonryGrid"
 
 function Projects() {
     return (
-    <section id="projects" className='py-24 px-4 sm:px-6 lg:px-8 bg-gray-50'>
+    <section id="proyectos" className='py-24 px-4 sm:px-6 lg:px-8 bg-gray-50'>
             <div className='container mx-auto'>
                 {/* Section Header */}
                 <div className='text-center mb-16'>

@@ -11,6 +11,7 @@ import {
     Users,
 
 } from "lucide-react"
+import Link from "next/link"
 
 function ServicesGrid() {
 
@@ -24,12 +25,14 @@ function ServicesGrid() {
             services: [
                 "Diseño arquitectónico integral",
                 "Planos y renders profesionales",
-                "Asesoria técnica durante todo el proceso"
+                "Asesoría técnica durante todo el proceso"
             ],
             description: "Planificamos y desarrollamos proyectos arquitectónicos adaptados a tus necesidades, garantizando diseño, funcionalidad y estética en cada detalle.",
             CTA: "Cotizar tu proyecto",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/proyectos.jpg"
+            bg: "/assets/images/proyectos.jpg",
+            url: '/proyectos',
+            CTAURL: "https://wa.me/524454503606?text=%C2%A1Hola!%20Me%20interesa%20el%20servicio%20de%20Proyectos.%20Quisiera%20m%C3%A1s%20informaci%C3%B3n."
         },
         {
             category: "Construcción",
@@ -44,7 +47,9 @@ function ServicesGrid() {
             description: "Ejecutamos obras con los más altos estándares, cuidando cada detalle desde la cimentación hasta la entrega final.",
             CTA: "Solicitar cotización",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/Construccion.jpg"
+            bg: "/assets/images/Construccion.jpg",
+            url: '/construccion',
+            CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20el%20servicio%20de%20Construcci%C3%B3n.%20Me%20gustar%C3%ADa%20un%20presupuesto."
         },
         {
             category: "Urbanización",
@@ -57,7 +62,9 @@ function ServicesGrid() {
             description: "Diseñamos y ejecutamos obras de urbanización que mejoran la conectividad y calidad de vida en cada comunidad.",
             CTA: "Cotizar Desarrollo",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/urbanizacionPrev.webp"
+            bg: "/assets/images/urbanizacionPrev.webp",
+            url: '/urbanizacion',
+            CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20su%20servicio%20de%20dise%C3%B1o%20de%20fraccionamientos."
         },
         {
             category: "Muebles a Medida",
@@ -70,7 +77,9 @@ function ServicesGrid() {
             description: "Creamos muebles personalizados que combinan estética, funcionalidad y durabilidad, adaptados a tu estilo de vida.",
             CTA: "Solicitar cotización",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/muebles.jpg"
+            bg: "/assets/images/muebles.jpg",
+            url: '/muebles-a-medida',
+            CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Muebles%20a%20Medida.%20Quisiera%20una%20cotizaci%C3%B3n."
         },
         {
             category: "Inmobiliaria",
@@ -83,7 +92,10 @@ function ServicesGrid() {
             description: "Compra, venta y renta de propiedades. Te ayudamos a vender tu inmueble con promoción efectiva y asesoría personalizada.",
             CTA: "Ver propiedades",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/pipila.webp"
+            bg: "/assets/images/Inmobiliaria.webp",
+            url: '/inmobiliaria',
+            // CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Inmobiliaria."
+            CTAURL: "#"
         },
         {
             category: "Mantenimiento",
@@ -97,12 +109,14 @@ function ServicesGrid() {
             description: "Servicios de mantenimiento preventivo y correctivo para prolongar la vida útil de tus construcciones.",
             CTA: "Solicitar servicio",
             gradient: "from-blue-600 to-blue-800",
-            bg: "/assets/images/image.png"
+            bg: "/assets/images/Mantenimiento.webp",
+            url: '/mantenimiento',
+            CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Mantenimiento."
         }
     ];
 
     return (
-        <section id="services" className='scroll-mt-20 bg-gray-50'>
+        <section id="servicios" className='scroll-mt-20 bg-gray-50'>
             {/* Header */}
             <div className='container mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-20 pb-6 text-center'>
                 <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy">Servicios que impulsan tus proyectos</h2>
@@ -160,12 +174,12 @@ function ServicesGrid() {
 
                                     {/* Call to Action */}
                                     <div className='mt-2 pt-6 border-t border-gray-100 space-y-2'>
-                                        <button className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer`} onClick={() => { console.log(`Solicitar información para ${service.category}`) }}>
+                                        <Link href={service.CTAURL} className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer flex justify-center items-center`}>
                                             {service.CTA}
-                                        </button>
-                                        <button className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer`} onClick={() => { console.log(`Solicitar información para ${service.category}`) }}>
+                                                </Link>
+                                        <Link href={service.url} className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer flex justify-center items-center`}>
                                             Más información
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
 

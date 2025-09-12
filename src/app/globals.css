@@ -36,3 +36,7 @@
   --color-stone-dark: #627084;
   --color-glass: #d1d7e0;
 }
+
+html {
+  scroll-behavior: smooth;
+}

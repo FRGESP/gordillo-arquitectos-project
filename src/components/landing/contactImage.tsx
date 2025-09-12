@@ -19,7 +19,7 @@ function ContactImage() {
                 <div className="container mx-auto w-full px-6 md:px-0">
                     <div className='h-full flex flex-col justify-center items-center md:items-start space-y-3 md:space-y-10 text-white  lg:max-w-1/2'>
                         <h2 className="md:text-6xl text-3xl font-bold text-center md:text-left">
-                            ¿Listo para empezar tu proyecto?
+                            ¿Listo para comenzar tu proyecto?
                         </h2>
                         <a href='/contacto' className="inline-flex items-center gap-2 text-white font-semibold px-4 py-2 bg-navy rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-navy-hover hover:scale-105">
                             <span className="md:text-2xl text-lg">Contáctanos</span>
