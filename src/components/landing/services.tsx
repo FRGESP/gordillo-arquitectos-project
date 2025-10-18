@@ -174,7 +174,7 @@ function ServicesGrid() {
 
                                     {/* Call to Action */}
                                     <div className='mt-2 pt-6 border-t border-gray-100 space-y-2'>
-                                        <Link href={service.CTAURL} className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer flex justify-center items-center`}>
+                                        <Link href={service.CTAURL} target="_blank" className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer flex justify-center items-center`}>
                                             {service.CTA}
                                                 </Link>
                                         <Link href={service.url} className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer flex justify-center items-center`}>

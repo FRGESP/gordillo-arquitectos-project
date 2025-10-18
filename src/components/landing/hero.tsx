@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react"
 
 function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center">
+        <section id="inicio" className="relative min-h-screen flex items-center">
             {/* Background image */}
             <Image
                 src="/assets/images/pipila.webp"
@@ -38,7 +38,7 @@ function Hero() {
 
                     <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center justify-center">
                         <Link
-                            href="#projects"
+                            href="/contacto"
                             className="inline-flex text-xl items-center justify-center rounded-xl bg-navy px-5 py-3 text-white font-bold shadow-lg shadow-blue-900/20 hover:bg-navy-hover hover:text-white transition-colors"
                         >
                             Contáctanos

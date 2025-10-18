@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { InstagramLogo, FacebookLogo, WhatsappLogo, List, X } from 'phosphor-react';
 import LinkUnderline from '../elements/linkUnderline';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
       if (pathname === '/') {
@@ -31,20 +33,20 @@ function Navbar() {
   }, [menuOpen]);
 
   const navItems = [
-    { name: 'Inicio', href: '/' },
-    { name: 'Servicios', href: '/#servicios' },
-    { name: 'Proyectos', href: '/#proyectos' },
+    { name: 'Inicio', href: 'inicio' },
+    { name: 'Servicios', href: 'servicios' },
+    { name: 'Proyectos', href: 'proyectos' },
     { name: 'Inmobiliaria', href: '/#' },
   ];
 
   const socialLinks = [
     {
       name: 'Facebook',
-      href: 'https://www.facebook.com/gordilloarquitectos',
+      href: 'https://www.facebook.com/share/1GUooxGK6o/',
       img: (
         <FacebookLogo
           size={32}
-          className={`transition-transform hover:scale-110 ${scrolled || menuOpen ? 'text-black' : 'text-white'} hover:text-[#1877f2] duration-300`}
+          className={`transition-transform hover:scale-110 ${scrolled || menuOpen ? 'text-black hover:text-[#1877f2]' : 'text-white'}  duration-300`}
         />
       ),
     },
@@ -54,17 +56,17 @@ function Navbar() {
       img: (
         <InstagramLogo
           size={32}
-          className={`transition-transform hover:scale-110 ${scrolled || menuOpen ? 'text-black' : 'text-white'} hover:text-[#D43089] duration-300`}
+          className={`transition-transform hover:scale-110  ${scrolled || menuOpen ? 'text-black hover:text-[#D43089]' : 'text-white'}  duration-300`}
         />
       ),
     },
     {
       name: 'WhatsApp',
-      href: 'https://wa.me/1234567890',
+      href: 'https://wa.me/524454503606',
       img: (
         <WhatsappLogo
           size={32}
-          className={`transition-transform hover:scale-110 ${scrolled || menuOpen ? 'text-black' : 'text-white'} hover:text-[#25D366] duration-300`}
+          className={`transition-transform hover:scale-110  ${scrolled || menuOpen ? 'text-black hover:text-[#25D366]' : 'text-white'}  duration-300`}
         />
       ),
     },
@@ -83,7 +85,7 @@ function Navbar() {
       >
         <div className="container mx-auto">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center ml-3 md:ml-0">
+            <div className="flex items-center ml-3 md:ml-0 cursor-pointer" onClick={() => {router.push('/'); setMenuOpen(false);}}>
               <img src={`/assets/images/${scrolled ? 'blackLogo.webp' : 'whiteLogo.webp'}`} alt="Gordillo Arquitectos" width={25} />
               <h1 className={`ml-2 text-2xl tracking-tight ${scrolled ? 'text-black' : 'text-white'}`}>
                 <span className="font-semibold">Gordillo</span> Arquitectos
@@ -94,7 +96,7 @@ function Navbar() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-8">
                 {navItems.map((item) => (
-                  <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen}>
+                  <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
                     {item.name}
                   </LinkUnderline>
                 ))}
@@ -139,7 +141,7 @@ function Navbar() {
           <div className="flex flex-col h-full">
             {/* Drawer header */}
             <div className="flex items-center justify-between px-1 h-16 border-b border-gray-200">
-              <div className="flex items-center ml-3">
+              <div className="flex items-center ml-3 cursor-pointer" onClick={() => {router.push('/'); setMenuOpen(false);}}>
                 <img src="/assets/images/blackLogo.webp" alt="Gordillo Arquitectos" width={25} height={25} />
                 <p className='ml-2 text-2xl'><span className="font-semibold">Gordillo</span> Arquitectos</p>
               </div>
@@ -156,14 +158,20 @@ function Navbar() {
             <div className="flex overflow-y-auto px-6 py-8">
               <nav className="flex flex-col space-y-6">
                 {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="text-2xl font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300"
-                  >
-                    {item.name}
-                  </a>
+                  <div key={item.name} onClick={() => setMenuOpen(false)}>
+                    <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true} mobileLink={true}>
+                      {item.name}
+                    </LinkUnderline>
+                  </div>
+
+                  // <a
+                  //   key={item.name}
+                  //   href={item.href}
+                  //   onClick={() => setMenuOpen(false)}
+                  //   className="text-2xl font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300"
+                  // >
+                  //   {item.name}
+                  // </a>
                 ))}
               </nav>
             </div>

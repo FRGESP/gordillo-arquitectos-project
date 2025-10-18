@@ -1,7 +1,7 @@
-'use client'
+// 'use client'
 import React from 'react'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
-import LinkUnderline from '@/components/elements/linkUnderline'
+// import LinkUnderline from '@/components/elements/linkUnderline'
 
 function Contact() {
 
@@ -38,7 +38,23 @@ function Contact() {
                                         </div>
                                         <div>
                                             <h3 className='text-lg font-semibold text-black'>{item.title}</h3>
-                                            <LinkUnderline blank={true} href={item.href} personalized={true} color='gray-600'>{item.text}</LinkUnderline>
+                                            {/* <LinkUnderline blank={true} href={item.href} personalized={true} color='gray-600'>{item.text}</LinkUnderline> */}
+                                            {/* <a href={item.href} className='text-base text-gray-600 hover:text-gray-800 transition-colors'>{item.text}</a> */}
+                                            <a
+                                                href={item.href}
+                                                target={'_blank'}
+                                                rel="noopener noreferrer"
+                                                className={`
+                                                text-gray-600 after:bg-black
+                                                relative inline-block cursor-pointer 
+                                                after:content-[''] after:absolute after:bottom-0
+                                                after:h-[2px] 
+                                                after:transition-all after:duration-300
+                                                after:left-0 after:w-0 hover:after:w-full
+                                            `}
+                                            >
+                                                {item.text}
+                                            </a>
                                         </div>
                                     </div>
                                 ))}

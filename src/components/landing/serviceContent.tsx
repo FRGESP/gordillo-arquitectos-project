@@ -97,7 +97,7 @@ function ServiceContent({ serviceName }: ServiceContentProps) {
                                 {serv?.cta.complement}
                             </p>
                             <Link 
-                                href={serv?.cta.url || '/contacto'}
+                                href={serv?.cta.url || '/contacto'} target="_blank"
                                 className="inline-block bg-white text-navy px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg"
                             >
                                 {serv?.cta.buttonText}

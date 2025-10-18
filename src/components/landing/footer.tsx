@@ -6,9 +6,9 @@ import LinkUnderline from '../elements/linkUnderline';
 function Footer() {
 
     const socialLinks = [
-        { name: "Facebook", href: "https://www.facebook.com/gordilloarquitectos", img: <FacebookLogo size={32} className={`transition-transform hover:scale-110 text-black hover:text-[#1877f2] duration-300`} /> },
+        { name: "Facebook", href: "https://www.facebook.com/share/1GUooxGK6o/", img: <FacebookLogo size={32} className={`transition-transform hover:scale-110 text-black hover:text-[#1877f2] duration-300`} /> },
         { name: "Instagram", href: "https://www.instagram.com/gordilloarquitectos", img: <InstagramLogo size={32} className={`transition-transform hover:scale-110 text-black hover:text-[#D43089] duration-300`} /> },
-        { name: "WhatsApp", href: "https://wa.me/1234567890", img: <WhatsappLogo size={32} className={`transition-transform hover:scale-110 text-black hover:text-[#25D366] duration-300`} /> },
+        { name: "WhatsApp", href: "https://wa.me/4454503606", img: <WhatsappLogo size={32} className={`transition-transform hover:scale-110 text-black hover:text-[#25D366] duration-300`} /> },
     ];
 
     const services = [
@@ -47,13 +47,14 @@ function Footer() {
                         </div>
                         <p className="text-gray-600 leading-relaxed mb-6 text-center md:text-left">
                             Proyectos arquitectónicos, construcción, urbanización e interiores con
-                            calidad y funcionalidad en Guanajuato y alrededores.
+                            calidad y funcionalidad en Moroleón y alrededores.
                         </p>
                         <div className="flex justify-center md:justify-start space-x-4">
                             {socialLinks.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
+                                    target='_blank'
                                     className="text-gray-500 hover:text-gray-800 transition-colors"
                                 >
                                     {link.img}
