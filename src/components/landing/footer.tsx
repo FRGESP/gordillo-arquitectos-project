@@ -12,12 +12,12 @@ function Footer() {
     ];
 
     const services = [
-        ["Proyectos", "/proyectos"],
-        ["Construcción", "/construccion"],
-        ["Urbanización", "/urbanizacion"],
-        ["Muebles a medida", "/muebles-a-medida"],
-        ["Bienes Raíces", "/inmobiliaria"],
-        ["Mantenimiento", "/mantenimiento"]
+        ["Proyectos", "/servicios/proyectos"],
+        ["Construcción", "/servicios/construccion"],
+        ["Urbanización", "/servicios/urbanizacion"],
+        ["Muebles a medida", "/servicios/muebles-a-medida"],
+        ["Inmobiliaria", "/servicios/inmobiliaria"],
+        ["Mantenimiento", "/servicios/mantenimiento"]
     ]
 
     const contactInfo = [

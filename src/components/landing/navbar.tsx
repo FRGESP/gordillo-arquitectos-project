@@ -36,7 +36,7 @@ function Navbar() {
     { name: 'Inicio', href: 'inicio' },
     { name: 'Servicios', href: 'servicios' },
     { name: 'Proyectos', href: 'proyectos' },
-    { name: 'Inmobiliaria', href: '/#' },
+    { name: 'Inmobiliaria', href: '/inmobiliaria' },
   ];
 
   const socialLinks = [
@@ -96,9 +96,15 @@ function Navbar() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-8">
                 {navItems.map((item) => (
-                  <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
+                  (item.name == 'Inmobiliaria') ? (
+                    <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={false}>
                     {item.name}
                   </LinkUnderline>
+                  ) : (
+                    <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
+                    {item.name}
+                  </LinkUnderline>
+                  )
                 ))}
                 <span className={`${scrolled || menuOpen ? 'text-black' : 'text-white'} font-semibold`}>|</span>
                 <div className="flex items-center space-x-4">
@@ -159,9 +165,15 @@ function Navbar() {
               <nav className="flex flex-col space-y-6">
                 {navItems.map((item) => (
                   <div key={item.name} onClick={() => setMenuOpen(false)}>
-                    <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true} mobileLink={true}>
+                    {item.name == 'Inmobiliaria' ? (
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={false} mobileLink={true}>
                       {item.name}
                     </LinkUnderline>
+                    ) : (
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true} mobileLink={true}>
+                        {item.name}
+                      </LinkUnderline>
+                    )}
                   </div>
 
                   // <a

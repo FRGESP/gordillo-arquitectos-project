@@ -31,7 +31,7 @@ function ServicesGrid() {
             CTA: "Cotizar tu proyecto",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/proyectos.jpg",
-            url: '/proyectos',
+            url: 'servicios/proyectos',
             CTAURL: "https://wa.me/524454503606?text=%C2%A1Hola!%20Me%20interesa%20el%20servicio%20de%20Proyectos.%20Quisiera%20m%C3%A1s%20informaci%C3%B3n."
         },
         {
@@ -48,7 +48,7 @@ function ServicesGrid() {
             CTA: "Solicitar cotización",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/Construccion.jpg",
-            url: '/construccion',
+            url: 'servicios/construccion',
             CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20el%20servicio%20de%20Construcci%C3%B3n.%20Me%20gustar%C3%ADa%20un%20presupuesto."
         },
         {
@@ -63,7 +63,7 @@ function ServicesGrid() {
             CTA: "Cotizar Desarrollo",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/urbanizacionPrev.webp",
-            url: '/urbanizacion',
+            url: 'servicios/urbanizacion',
             CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20su%20servicio%20de%20dise%C3%B1o%20de%20fraccionamientos."
         },
         {
@@ -78,7 +78,7 @@ function ServicesGrid() {
             CTA: "Solicitar cotización",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/muebles.jpg",
-            url: '/muebles-a-medida',
+            url: 'servicios/muebles-a-medida',
             CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Muebles%20a%20Medida.%20Quisiera%20una%20cotizaci%C3%B3n."
         },
         {
@@ -93,9 +93,9 @@ function ServicesGrid() {
             CTA: "Ver propiedades",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/Inmobiliaria.webp",
-            url: '/inmobiliaria',
+            url: 'servicios/inmobiliaria',
             // CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Inmobiliaria."
-            CTAURL: "#"
+            CTAURL: "/inmobiliaria"
         },
         {
             category: "Mantenimiento",
@@ -110,7 +110,7 @@ function ServicesGrid() {
             CTA: "Solicitar servicio",
             gradient: "from-blue-600 to-blue-800",
             bg: "/assets/images/Mantenimiento.webp",
-            url: '/mantenimiento',
+            url: 'servicios/mantenimiento',
             CTAURL: "https://wa.me/5214454503606?text=%C2%A1Hola!%20Me%20interesa%20su%20servicio%20de%20Mantenimiento."
         }
     ];
@@ -174,7 +174,7 @@ function ServicesGrid() {
 
                                     {/* Call to Action */}
                                     <div className='mt-2 pt-6 border-t border-gray-100 space-y-2'>
-                                        <Link href={service.CTAURL} target="_blank" className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer flex justify-center items-center`}>
+                                        <Link href={service.CTAURL} target={service.category != "Inmobiliaria" ? "_blank" : ""} className={`w-full bg-navy text-white font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-navy-hover cursor-pointer flex justify-center items-center`}>
                                             {service.CTA}
                                                 </Link>
                                         <Link href={service.url} className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer flex justify-center items-center`}>

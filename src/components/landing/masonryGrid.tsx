@@ -1,5 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
+import { getProjects } from '@/actions';
+import { get } from 'http';
+
+
 
 interface ImageInterface {
     src: string;
@@ -7,27 +11,53 @@ interface ImageInterface {
     index: number;
 }
 
-const images: ImageInterface[] = [
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 0 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 1 },
-    { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 2 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 3 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 4 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 5 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 6 },
-    { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 7 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 8 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 9 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 10 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 11 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 12 },
-]
+interface ImageProjectInterface {
+    id: string;
+    url: string;
+}
+
+interface ProjectsInterface {
+    id: number;
+    Nombre: string;
+    Imagen: ImageProjectInterface[];
+}
+
+// const images: ImageInterface[] = [
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 0 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 1 },
+//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 2 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 3 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 4 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 5 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 6 },
+//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 7 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 8 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 9 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 10 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 11 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 12 },
+// ]
 
 function MasonryGrid() {
+    const [images, setImages] = useState<ImageInterface[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
     const [direction, setDirection] = useState<1 | -1>(1); // 1: next, -1: prev
     const [isExpanded, setIsExpanded] = useState(false);
+
+    const getProjectsData = async () => {
+        const projectsImages = await getProjects();
+
+        console.log('Projects fetched:', projectsImages);
+
+        setImages(projectsImages);
+
+    }
+
+
+    useEffect(() => {
+        getProjectsData();
+},[])
 
     const openAt = (index: number) => {
         setCurrentIndex(index);

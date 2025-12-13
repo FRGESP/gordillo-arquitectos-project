@@ -7,13 +7,11 @@ function ContactImage() {
                 src="/assets/images/contactimage.webp" 
                 alt="Imagen de contacto" 
                 className="w-full md:h-auto md:max-h-[60vh] h-[40vh] object-cover object-right hidden md:block" 
-                loading="lazy"
             />
             <img 
                 src="/assets/images/contactimageMobile.webp" 
                 alt="Imagen de contacto" 
                 className="w-full h-auto object-cover object-right md:hidden" 
-                loading="lazy"
             />
             <div className="absolute w-full top-0 left-0 z-10 h-full flex items-center bg-black/10 md:bg-transparent">
                 <div className="container mx-auto w-full px-6 md:px-0">

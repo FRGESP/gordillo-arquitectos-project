@@ -1,6 +1,7 @@
 import { servicesData } from "@/data/servicesData"
 import Image from "next/image";
 import Link from "next/link";
+import RelatedProperties from "../elements/relatedProperties";
 
 interface ServiceContentProps {
     serviceName: string
@@ -71,7 +72,7 @@ function ServiceContent({ serviceName }: ServiceContentProps) {
                                             {detail.title}
                                         </h3>
                                     </div>
-                                    <p className="mb-4">{detail.description}</p>
+                                    <p className="mb-4 md:text-justify">{detail.description}</p>
                                 </div>
                                 <div className={`${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
                                     <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden shadow-lg">
@@ -105,8 +106,12 @@ function ServiceContent({ serviceName }: ServiceContentProps) {
                         </div>
                     </div>
 
-                    <div className="mt-25">
-                        <h3 className="text-3xl font-bold text-navy mb-12 text-center">Otros Servicios que te pueden interesar</h3>
+                    {serviceName === 'inmobiliaria' && (
+                        <RelatedProperties />
+                    )}
+
+                    <div className="mt-25 border-t pt-12 border-gray-200">
+                        <h3 className="text-3xl font-bold text-navy mb-12 text-center">Otros servicios que te pueden interesar</h3>
                         <div className='grid md:grid-cols-3 gap-8'>
                             {[otherServ1, otherServ2, otherServ3].map((otherServ, index) => (
                                 otherServ ? (
@@ -138,7 +143,7 @@ function ServiceContent({ serviceName }: ServiceContentProps) {
 
                                             {/* Call to Action */}
                                             <div className='mt-2 pt-6 border-t border-gray-100 space-y-2'>
-                                                <Link href={`/${otherServ.slug}`} className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer flex justify-center items-center`}>
+                                                <Link href={`/servicios/${otherServ.slug}`} className={`w-full bg-[#e0e0e0] text-black font-semibold py-3 px-6 rounded-xl tracking-wide transition duration-200 ease-in-out hover:scale-105 hover:bg-secondary-hover cursor-pointer flex justify-center items-center`}>
                                                     Más información
                                                 </Link>
                                             </div>

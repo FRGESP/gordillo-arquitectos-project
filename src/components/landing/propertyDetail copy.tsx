@@ -1,0 +1,548 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import {
+    MapPin,
+    Ruler,
+    Square,
+    Key,
+    DollarSign,
+    Bed,
+    Bath,
+    ChevronLeft,
+    ChevronRight,
+    X,
+} from "lucide-react";
+import type { Property } from "@/actions";
+import { getPropertyBySlug, getRelatedProperties } from "@/actions";
+import RelatedProperties from "../elements/relatedProperties";
+import { useRouter } from 'next/navigation';
+
+
+type Props = {
+    property: Property;
+    relatedProperties?: Property[];
+    propertySlugProp: string;
+};
+
+const currency = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+    maximumFractionDigits: 0,
+});
+
+
+function PropertyDetail({ property, relatedProperties = [], propertySlugProp }: Props) {
+
+    const router = useRouter();
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [showLightbox, setShowLightbox] = useState(false);
+    const thumbnailsContainerRef = useRef<HTMLDivElement>(null);
+    const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    //Gaurda la información de la propiedad
+    const [propertyData, setPropertyData] = useState<Property | null>(null);
+
+    //Estado por si no se encuentra la propiedad
+    const [notFound, setNotFound] = useState(false);
+
+    // Dummy images para la galería - con diferentes imágenes
+    const dummyImages = [
+        { src: "/assets/images/pipila.webp", alt: "Vista principal", index: 0 },
+        { src: "/assets/images/proyectos.jpg", alt: "Vista lateral", index: 1 },
+        { src: "/assets/images/Mantenimiento.webp", alt: "Interior 1", index: 2 },
+        { src: "/assets/images/urbanizacion.webp", alt: "Interior 2", index: 3 },
+        { src: "/assets/images/muebles.jpg", alt: "Vista aérea", index: 4 },
+        { src: "/assets/images/Construccion.jpg", alt: "Fachada", index: 5 },
+    ];
+
+    // Si la propiedad tiene imágenes, usarlas; si no, usar dummy
+    let images = propertyData?.Imagenes && propertyData.Imagenes.length > 0 ? propertyData.Imagenes : dummyImages;
+    const isRent = propertyData?.Tipo?.toLowerCase() === "renta";
+
+    const nextImage = () => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    };
+
+    const prevImage = () => {
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    };
+
+
+    // Scroll automático de las miniaturas cuando cambia la imagen
+    useEffect(() => {
+        if (thumbnailRefs.current[currentImageIndex] && thumbnailsContainerRef.current) {
+            const thumbnail = thumbnailRefs.current[currentImageIndex];
+            if (thumbnail) {
+                thumbnail.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                });
+            }
+        }
+    }, [currentImageIndex]);
+
+    // Datos dummy adicionales
+    const additionalDetails = {
+        bedrooms: 3,
+        bathrooms: 2.5,
+        parking: 2,
+        yearBuilt: 2020,
+        propertyType: "Casa",
+        description: `Esta hermosa propiedad combina diseño contemporáneo con funcionalidad excepcional. 
+    Ubicada en una de las mejores zonas de la ciudad, ofrece espacios amplios y luminosos perfectos para familias modernas.
+    
+    La casa cuenta con acabados de primera calidad, cocina integral equipada, amplias recámaras con closets, 
+    y un jardín perfectamente diseñado. La ubicación privilegiada te permite acceso rápido a escuelas, 
+    centros comerciales y principales vías de comunicación.`,
+        features: [
+            "Cocina integral equipada",
+            "Closets en todas las recámaras",
+            "Jardín con sistema de riego",
+            "Cisterna y tinaco",
+            "Protecciones en ventanas",
+            "Portón eléctrico",
+            "Iluminación LED",
+            "Calentador solar",
+        ],
+        amenities: [
+            "Área de juegos infantiles",
+            "Circuito cerrado",
+            "Vigilancia 24/7",
+            "Áreas verdes",
+            "Caseta de vigilancia",
+        ],
+    };
+
+    const loadPropertyData = async () => {
+    try {
+        const data = await getPropertyBySlug(propertySlugProp);
+        setPropertyData(data[0]);
+        
+        images = data[0].Imagenes && data[0].Imagenes.length > 0 ? data[0].Imagenes : [];
+    } catch (error) {
+        console.error("Error loading property data:", error);
+        // Redirigir a una página de error o mostrar un mensaje
+        setNotFound(true);
+    }
+}
+
+    //Carga la información incial de la propiedad
+    useEffect(() => {
+        loadPropertyData();
+    }, [propertySlugProp]);
+
+    return (
+        <div className="min-h-screen bg-stone">
+            
+
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+                {/* Galería de imágenes */}
+                <div className="mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {/* Imagen principal */}
+                        <div
+                            className="md:col-span-3 relative aspect-[16/9] rounded-2xl overflow-hidden cursor-pointer group"
+                            onClick={() => setShowLightbox(true)}
+                        >
+                            <Image
+                                src={images[currentImageIndex].src}
+                                alt={images[currentImageIndex].alt}
+                                fill
+                                className="object-cover transition-transform duration-300"
+                                priority
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+
+                            {/* Badge tipo de propiedad */}
+                            <div
+                                className={`absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-lg ${isRent
+                                    ? "bg-amber-500 text-white"
+                                    : "bg-emerald-600 text-white"
+                                    }`}
+                            >
+                                {isRent ? <Key size={16} /> : <DollarSign size={16} />}
+                                {isRent ? "En renta" : "En venta"}
+                            </div>
+
+                            {/* Controles de navegación */}
+                            {images.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            prevImage();
+                                        }}
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white hover:cursor-pointer p-2 rounded-full shadow-lg transition-all"
+                                    >
+                                        <ChevronLeft size={24} className="text-gray-900" />
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            nextImage();
+                                        }}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 hover:cursor-pointer rounded-full shadow-lg transition-all"
+                                    >
+                                        <ChevronRight size={24} className="text-gray-900" />
+                                    </button>
+
+                                    {/* Indicador de imágenes */}
+                                    <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+                                        {currentImageIndex + 1} / {images.length}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Miniaturas con scroll */}
+                        <div className="hidden md:block relative h-full col-span-1">
+                            <div
+                                ref={thumbnailsContainerRef}
+                                className="absolute inset-0 flex flex-col gap-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400"
+                                style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}
+                            >
+                                {images.map((img, idx) => (
+                                    <div
+                                        key={idx}
+                                        ref={(el) => { thumbnailRefs.current[idx] = el }}
+                                        className={`relative aspect-video rounded-xl overflow-hidden cursor-pointer border-2 transition-all shrink-0 ${currentImageIndex === idx
+                                            ? "border-navy ring-navy/20 shadow-md"
+                                            : "border-transparent hover:border-gray-300"
+                                            }`}
+                                        onClick={() => setCurrentImageIndex(idx)}
+                                    >
+                                        <Image src={img.src} alt={img.alt} fill className="object-cover" />
+                                        {currentImageIndex !== idx && (
+                                            <div className="absolute inset-0 bg-black/10 hover:bg-black/0 transition-colors" />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Contenido principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Columna principal - Información */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Título y precio */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm">
+                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+                                        {propertyData?.NombrePropiedad}
+                                    </h1>
+                                    {propertyData?.Direccion && (
+                                        <div className="mt-2 flex items-center gap-2 text-gray-600">
+                                            <MapPin size={18} className="text-navy" />
+                                            <span>{propertyData.Direccion}</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="shrink-0">
+                                    <div className="text-3xl md:text-4xl font-bold text-navy">
+                                        {currency.format(propertyData?.Precio ? propertyData.Precio : 0)} <span className={isRent ? "inline text-lg text-gray-500" : "hidden"}>/ mes</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Características principales */}
+                            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                    <Ruler size={24} className="text-navy" />
+                                    <div>
+                                        <div className="text-2xl font-bold text-gray-900">
+                                            {propertyData?.AreaTerreno || 0} m² 
+                                        </div>
+                                        <div className="text-xs text-gray-500">Área de Terreno</div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                    <Square size={24} className="text-navy" />
+                                    <div>
+                                        <div className="text-2xl font-bold text-gray-900">
+                                            {propertyData?.AreaConstruccion || 0} m²
+                                        </div>
+                                        <div className="text-xs text-gray-500">Área de Construcción</div>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                    <Bed size={24} className="text-navy" />
+                                    <div>
+                                        <div className="text-2xl font-bold text-gray-900">
+                                            {propertyData?.Recamaras || 0}
+                                        </div>
+                                        <div className="text-xs text-gray-500">Recámaras</div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                    <Bath size={24} className="text-navy" />
+                                    <div>
+                                        <div className="text-2xl font-bold text-gray-900">
+                                            {propertyData?.Bathrooms || 0}
+                                        </div>
+                                        <div className="text-xs text-gray-500">Baños</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+
+                        {/* Descripción */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                                Descripción
+                            </h2>
+                            <div className="prose prose-gray max-w-none">
+                                {propertyData?.Descripcion?.split("\n").map((paragraph, idx) => (
+                                    <p key={idx} className="text-gray-600 leading-relaxed mb-3">
+                                        {paragraph.trim()}
+                                    </p>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Características */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                                Características
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {propertyData?.Caracteristicas?.map((caracteristica) => (
+                                    <div
+                                        key={caracteristica.id}
+                                        className="flex items-center gap-2 text-gray-700"
+                                    >
+                                        <div className="w-2 h-2 bg-navy rounded-full" />
+                                        <span>{caracteristica.Descripcion}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Mapa */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                                Ubicación
+                            </h2>
+                            <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-gray-100">
+                                {/* Placeholder para Google Maps */}
+                                <iframe
+                                    src={propertyData?.LinkMapaGoogleMaps}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    className="absolute inset-0"
+                                />
+                            </div>
+                            <div className="mt-4 flex items-start gap-2 text-sm text-gray-600">
+                                <MapPin size={18} className="text-navy shrink-0 mt-0.5" />
+                                <a href={propertyData?.LinkGoogleMaps || "#"} target="_blank" rel="noopener noreferrer">{propertyData?.Direccion || "Guanajuato, Gto."}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Columna lateral - Contacto */}
+                    <div className="lg:col-span-1">
+                        <div className="sticky top-24 space-y-6">
+                            {/* Formulario de contacto */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                                    ¿Te interesa esta propiedad?
+                                </h3>
+                                <form className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Nombre
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                            placeholder="Tu nombre"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Teléfono
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                            placeholder="(123) 456-7890"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Correo electrónico
+                                        </label>
+                                        <input
+                                            type="email"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                            placeholder="tu@email.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Mensaje
+                                        </label>
+                                        <textarea
+                                            rows={4}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all resize-none"
+                                            placeholder="Me gustaría obtener más información sobre esta propiedad..."
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-navy hover:bg-navy-hover text-white font-semibold py-3 rounded-lg transition-colors"
+                                    >
+                                        Enviar mensaje
+                                    </button>
+                                </form>
+
+                                <div className="mt-6 pt-6 border-t border-gray-200">
+                                    <p className="text-sm text-gray-600 mb-3">
+                                        O contáctanos directamente:
+                                    </p>
+                                    <div className="space-y-2 text-sm">
+                                        <a
+                                            href="tel:+4454503606"
+                                            className="flex items-center gap-2 text-gray-700 hover:text-navy transition-colors"
+                                        >
+                                            <svg
+                                                className="w-4 h-4"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                                />
+                                            </svg>
+                                            445-450-3606
+                                        </a>
+                                        <a
+                                            href="https://wa.me/524454503606"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
+                                        >
+                                            <svg
+                                                className="w-4 h-4"
+                                                fill="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                            </svg>
+                                            WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Información adicional */}
+                            <div className="bg-navy/5 rounded-2xl p-6">
+                                <h3 className="text-lg font-bold text-gray-900 mb-3">
+                                    Información importante
+                                </h3>
+                                <ul className="space-y-2 text-sm text-gray-600">
+                                    <li className="flex items-start gap-2">
+                                        <div className="w-1.5 h-1.5 bg-navy rounded-full mt-2" />
+                                        <span>Documentación en regla</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <div className="w-1.5 h-1.5 bg-navy rounded-full mt-2" />
+                                        <span>Disponible para visitas con cita previa</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <div className="w-1.5 h-1.5 bg-navy rounded-full mt-2" />
+                                        <span>Acepta créditos bancarios</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <div className="w-1.5 h-1.5 bg-navy rounded-full mt-2" />
+                                        <span>Asesoría legal incluida</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Propiedades relacionadas */}
+                <RelatedProperties idProperty={property.id} />
+            </div>
+
+            <div className={`${showLightbox ? '' : 'hidden'}`}>
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        className='fixed inset-0 bg-black/90 flex items-center justify-center z-50'
+                        onClick={() => setShowLightbox(false)}
+                    >
+                        {/* Botón de cerrar */}
+                        <button
+                            aria-label="Cerrar modal"
+                            onClick={(e) => { e.stopPropagation(); setShowLightbox(false); }}
+                            className='absolute top-6 right-6 p-3 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer z-10'
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        {/* Contenedor de imagen (click no cierra) */}
+                        <div className="relative w-full h-full max-w-7xl max-h-[90vh] mx-auto p-4">
+                        <Image
+                            src={images[currentImageIndex].src}
+                            alt={images[currentImageIndex].alt}
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+
+                        {/* Flecha Prev fija (fuera de la imagen) */}
+                        <button
+                            aria-label="Imagen anterior"
+                            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                            className='absolute left-6 md:left-8 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer'
+                        >
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M15 18l-6-6 6-6" />
+                            </svg>
+                        </button>
+
+                        {/* Flecha Next fija (fuera de la imagen) */}
+                        <button
+                            aria-label="Imagen siguiente"
+                            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                            className='absolute right-6 md:right-8 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer'
+                        >
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M9 6l6 6-6 6" />
+                            </svg>
+                        </button>
+                    </div>
+            </div>
+        </div>
+    );
+}
+
+export default PropertyDetail;

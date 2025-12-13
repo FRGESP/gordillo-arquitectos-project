@@ -1,3 +1,4 @@
+"use client"
 import { ReactNode } from "react"
 import { useRouter, usePathname } from "next/navigation"
 
@@ -67,6 +68,7 @@ function LinkUnderline({
         after:h-[2px] 
         after:transition-all after:duration-300
         after:left-0 after:w-0 hover:after:w-full
+        ${mobileLink ? 'text-2xl' : ''}
         ${className}
       `}
         >
