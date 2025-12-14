@@ -4,12 +4,12 @@ function ContactImage() {
     return (
         <div className="relative">
             <img 
-                src="/assets/images/contactimage.webp" 
+                src="/assets/images/contactImage.webp" 
                 alt="Imagen de contacto" 
                 className="w-full md:h-auto md:max-h-[60vh] h-[40vh] object-cover object-right hidden md:block" 
             />
             <img 
-                src="/assets/images/contactimageMobile.webp" 
+                src="/assets/images/contactImageMobile.webp" 
                 alt="Imagen de contacto" 
                 className="w-full h-auto object-cover object-right md:hidden" 
             />

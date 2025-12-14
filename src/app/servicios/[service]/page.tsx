@@ -1,6 +1,6 @@
 import ServiceContent from "@/components/landing/serviceContent"
 interface ServicePageProps {
-    params: { service: string }
+    params: Promise<{ service: string }>;
 }
 
 async function ServicePage({ params }: ServicePageProps) {

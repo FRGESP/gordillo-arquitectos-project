@@ -1,8 +1,7 @@
 'use client'
 import React, { use, useEffect, useState } from 'react'
 import { getProjects } from '@/actions';
-import { get } from 'http';
-
+import Image from 'next/image';
 
 
 interface ImageInterface {
@@ -122,7 +121,7 @@ function MasonryGrid() {
         }, [src, direction]);
 
         return (
-            <img
+            <Image
                 src={src}
                 alt={alt}
                 className={[
@@ -141,7 +140,7 @@ function MasonryGrid() {
                 <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4'>
                     {images.map((image) => (
                         <div key={image.index} className='mb-4 break-inside-avoid-column'>
-                            <img
+                            <Image
                                 src={image.src}
                                 alt={image.alt}
                                 className='w-full object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'

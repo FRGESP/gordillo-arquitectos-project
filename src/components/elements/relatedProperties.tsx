@@ -3,7 +3,8 @@
 import { Property } from "@/actions";
 import { use, useEffect, useState } from "react";
 import { getRelatedProperties } from "@/actions";
-import { ChevronRight, Link } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import PropertyCard from "../landing/propertyCard";
 
 interface RelatedPropertiesProps {
@@ -35,13 +36,13 @@ function RelatedProperties({ idProperty }: RelatedPropertiesProps) {
                         </h2>
 
                         <div className="flex items-center justify-center">
-                            <a
+                            <Link
                                 href="/inmobiliaria"
-                                className="text-navy hover:text-navy-hover font-semibold flex items-center gap-1 whitespace-nowrap transition-colors"
+                                className="text-navy hover:text-navy-hover font-semibold flex items-center gap-1 transition-colors"
                             >
                                 Ver todas
                                 <ChevronRight size={20} />
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

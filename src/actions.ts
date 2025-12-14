@@ -6,6 +6,8 @@ export interface ImageInterface {
     src: string;
     alt: string;
     index: number;
+    id?: string;
+    url?: string;
 }
 
 interface Caracteristicas{
@@ -27,8 +29,8 @@ export interface Property {
     Caracteristicas?: Caracteristicas[];
     slug: string;
     Imagenes?: ImageInterface[];
-    LinkGoogleMaps?: string;
-    LinkMapaGoogleMaps?: string;
+    LinkGoogleMaps: string;
+    LinkMapaGoogleMaps: string;
 }
 
 interface ImageProjectInterface {
@@ -42,7 +44,7 @@ interface ProjectsInterface {
     Imagen: ImageProjectInterface[];
 }
 
-const GetPropertiesImage = (images: ImageProjectInterface[]) => {
+const GetPropertiesImage = (images: ImageInterface[]) => {
     // return images.map(image => ({
     //     src: `${STRAPI_URL}${image.url}`,
     //     alt: `Propiedad Imagen ${image.id}`,
@@ -59,7 +61,7 @@ const GetPropertiesImage = (images: ImageProjectInterface[]) => {
     return result;
 }
 
-const GetPropertiesImages = (images: ImageProjectInterface[]) => {
+const GetPropertiesImages = (images: ImageInterface[]) => {
 
     const result = images.map(image => ({
         src: `${STRAPI_URL}${image.url}`,
@@ -75,7 +77,7 @@ export const getProperties = async () => {
     const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Precio,Recamaras,Bathrooms,Direccion,AreaTerreno,AreaConstruccion,slug,Tipo&populate[Imagenes][fields][0]=url&sort=updatedAt:desc`);
     const { data } = response.data;
 
-    const properties: Property[] = data.map((property: any) => {
+    const properties: Property[] = data.map((property: Property) => {
         const processedImages = property.Imagenes
             ? GetPropertiesImage(property.Imagenes)
             : [];
@@ -124,14 +126,14 @@ export const getPropertyBySlug = async (slug: string) => {
     const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Descripcion,Precio,Direccion,AreaTerreno,AreaConstruccion,Bathrooms,Recamaras,slug,Tipo,LinkGoogleMaps,LinkMapaGoogleMaps&populate[Imagenes][fields][0]=url&sort=updatedAt:desc&populate=Caracteristicas&filters[slug][$eq]=${slug}`);
     const { data } = response.data;
 
-    const properties: Property[] = data.map( (property: any) => {
+    const properties: Property[] = data.map( (property: Property) => {
         const processedImages = property.Imagenes
             ? GetPropertiesImages(property.Imagenes)
             : [];
 
         const start = property.LinkMapaGoogleMaps.indexOf('"') + 1;
         const end = property.LinkMapaGoogleMaps.indexOf('"', start);
-        const googleMapsLink = property.LinkMapaGoogleMaps ? property.LinkMapaGoogleMaps.slice(start, end) : "";
+        const googleMapsLink = property.LinkMapaGoogleMaps.slice(start, end);
 
         return {
             id: property.id,
@@ -169,7 +171,7 @@ export async function getRelatedProperties(
       }
     });
 
-    return response.data.data.map((item: any) => ({
+    return response.data.data.map((item: Property) => ({
       id: item.id,
       slug: item.slug,
       NombrePropiedad: item.NombrePropiedad,
@@ -181,7 +183,7 @@ export async function getRelatedProperties(
       Bathrooms: item.Bathrooms,
       AreaTerreno: item.AreaTerreno,
       AreaConstruccion: item.AreaConstruccion,
-      Slug: item.Slug,
+      Slug: item.slug,
       LinkMapaGoogleMaps: item.LinkMapaGoogleMaps,
       LinkGoogleMaps: item.LinkGoogleMaps,
       Imagenes: GetPropertiesImage(item.Imagenes || []),

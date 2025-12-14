@@ -5,7 +5,7 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 
 function Contact() {
 
-    let contactItems = [
+    const contactItems = [
         { icon: MapPin, text: 'Pípila 706, Moroleón Gto.', href: 'https://maps.app.goo.gl/gGrwqi2FtsUs3kzr6', title: "Dirección" },
         { icon: Phone, text: '4454503606', href: 'tel:4454503606', title: "Teléfono" },
         { icon: Mail, text: 'fernandogordilloortega@gmail.com', href: 'mailto:fernandogordilloortega@gmail.com', title: "Correo" },

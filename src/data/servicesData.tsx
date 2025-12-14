@@ -64,7 +64,7 @@ export const servicesData: Service[] = [
             {
                 title: 'Construcción en general',
                 description: 'Con una sólida trayectoria en el sector, ofrecemos un servicio integral de construcción que abarca proyectos de diversa escala y complejidad. Nuestro equipo de profesionales y nuestra red de proveedores de confianza nos permiten gestionar y ejecutar cada obra con la máxima eficiencia y calidad. Desde la cimentación hasta los acabados finales, nos hacemos cargo de todo el proceso para que tu visión se construya sobre bases firmes y duraderas.',
-                imageUrl: '/assets/images/services/Construccion-Construccion.webp',
+                imageUrl: '/assets/images/services/Construccion-construccion.webp',
             },
             {
                 title: 'Nueva construcción',
