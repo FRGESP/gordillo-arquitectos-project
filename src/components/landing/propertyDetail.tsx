@@ -51,6 +51,9 @@ function PropertyDetail({propertySlugProp }: Props) {
     //Guarda la información de las imágenes
     const [imagesData, setImagesData] = useState<ImageInterface[]>([]);
 
+    //Estado de carga
+    const [isLoading, setIsLoading] = useState(true);
+
     const isRent = propertyData?.Tipo?.toLowerCase() === "renta";
 
     const nextImage = () => {
@@ -77,6 +80,7 @@ function PropertyDetail({propertySlugProp }: Props) {
 
     const loadPropertyData = async () => {
         try {
+            setIsLoading(true);
             const data = await getPropertyBySlug(propertySlugProp);
             setPropertyData(data[0]);
             console.log('Loaded property data:', data[0]);
@@ -86,6 +90,8 @@ function PropertyDetail({propertySlugProp }: Props) {
             console.error("Error loading property data:", error);
             // Redirigir a una página de error o mostrar un mensaje
             setNotFound(true);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -102,7 +108,81 @@ function PropertyDetail({propertySlugProp }: Props) {
 
     return (
         <div className="min-h-screen bg-stone">
-            {notFound ? (
+            {isLoading ? (
+                // Skeleton Loader
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+                    <div className="mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            {/* Skeleton imagen principal */}
+                            <div className="md:col-span-3 relative aspect-[16/9] rounded-2xl bg-gray-300 animate-pulse" />
+                            {/* Skeleton miniaturas */}
+                            <div className="hidden md:flex flex-col gap-4">
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="aspect-video rounded-xl bg-gray-300 animate-pulse" />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2 space-y-6">
+                            {/* Skeleton título */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <div className="h-10 bg-gray-300 rounded animate-pulse mb-4 w-3/4" />
+                                <div className="h-5 bg-gray-300 rounded animate-pulse w-1/2" />
+                                
+                                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="h-20 bg-gray-200 rounded-xl animate-pulse" />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Skeleton descripción */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <div className="h-7 bg-gray-300 rounded animate-pulse mb-4 w-1/3" />
+                                <div className="space-y-3">
+                                    <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                                    <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                                    <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
+                                </div>
+                            </div>
+
+                            {/* Skeleton características */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <div className="h-7 bg-gray-300 rounded animate-pulse mb-4 w-1/4" />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                                        <div key={i} className="h-6 bg-gray-200 rounded animate-pulse" />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Skeleton mapa */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <div className="h-7 bg-gray-300 rounded animate-pulse mb-4 w-1/4" />
+                                <div className="aspect-[16/9] rounded-xl bg-gray-300 animate-pulse" />
+                            </div>
+                        </div>
+
+                        {/* Skeleton formulario */}
+                        <div className="lg:col-span-1">
+                            <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                <div className="h-6 bg-gray-300 rounded animate-pulse mb-4 w-2/3" />
+                                <div className="space-y-4">
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i}>
+                                            <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-1/3" />
+                                            <div className="h-10 bg-gray-200 rounded-lg animate-pulse" />
+                                        </div>
+                                    ))}
+                                    <div className="h-12 bg-gray-300 rounded-lg animate-pulse" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ) : notFound ? (
                 <div className="flex flex-col items-center justify-center h-screen text-center">
                     <h1 className="text-5xl font-bold mb-4">Propiedadad no encontrada</h1>
                     <p className="text-lg mb-6">Lo sentimos, la propiedad que buscas no está disponible.</p>

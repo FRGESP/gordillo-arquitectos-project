@@ -22,7 +22,7 @@ function PropertyCard({ property }: Props) {
   return (
     <Link 
       href={`/inmobiliaria/${property.slug}`} 
-      className="group block overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:shadow-md"
+      className="group block overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition hover:shadow-lg"
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
         <div className={`absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${isRent ? 'bg-amber-500 text-white' : 'bg-emerald-600 text-white'}`}>
@@ -50,7 +50,7 @@ function PropertyCard({ property }: Props) {
           <h3 className="line-clamp-1 text-lg font-semibold text-gray-900">
             {property.NombrePropiedad}
           </h3>
-          <div className="shrink-0 text-sm font-semibold text-gray-900">
+          <div className="shrink-0 font-bold text-navy-dark">
             {currency.format(property.Precio)}{property.Tipo == 'Renta' ? '/mes' : ''}
           </div>
         </div>
