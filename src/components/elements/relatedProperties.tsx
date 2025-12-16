@@ -16,7 +16,6 @@ function RelatedProperties({ idProperty }: RelatedPropertiesProps) {
     const [relatedPropertiesData, setRelatedPropertiesData] = useState<Property[]>([]);
 
     const fetchRelatedProperties = async () => {
-        console.log('Fetching related properties for ID:', idProperty);
         const properties = await getRelatedProperties(idProperty || 0, 3);
         setRelatedPropertiesData(properties);
     };

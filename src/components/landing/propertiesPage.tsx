@@ -52,12 +52,6 @@ function PropertiesPage() {
       .sort(sortBy);
   }, [properties, search, tipoFilter, ordenFilter])
   
-  // const useFilters = () => {
-  //   const tipoValue = (document.getElementById('tipoSelect') as HTMLSelectElement).value;
-  //   const ordenValue = (document.getElementById('ordenSelect') as HTMLSelectElement).value;
-  //   console.log('Tipo seleccionado:', tipoValue);
-  //   console.log('Orden seleccionado:', ordenValue);
-  // }
 
   return (
     <div className="py-24 px-4 sm:px-6 lg:px-8 bg-stone">

@@ -32,6 +32,34 @@ function Navbar() {
     };
   }, [menuOpen]);
 
+  // Handle scroll on mount if hash is present
+  useEffect(() => {
+    if (pathname === '/' && window.location.hash) {
+      const hash = window.location.hash.slice(1);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [pathname]);
+
+  const handleNavClick = (href: string, isNavbarLink: boolean) => {
+    setMenuOpen(false);
+    
+    if (isNavbarLink) {
+      if (pathname === '/') {
+        const element = document.getElementById(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        router.push(`/#${href}`);
+      }
+    }
+  };
+
   const navItems = [
     { name: 'Inicio', href: 'inicio' },
     { name: 'Servicios', href: 'servicios' },
@@ -101,9 +129,11 @@ function Navbar() {
                     {item.name}
                   </LinkUnderline>
                   ) : (
-                    <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
-                    {item.name}
-                  </LinkUnderline>
+                    <div key={item.name} onClick={() => handleNavClick(item.href, true)}>
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
+                        {item.name}
+                      </LinkUnderline>
+                    </div>
                   )
                 ))}
                 <span className={`${scrolled || menuOpen ? 'text-black' : 'text-white'} font-semibold`}>|</span>
@@ -164,7 +194,7 @@ function Navbar() {
             <div className="flex overflow-y-auto px-6 py-8">
               <nav className="flex flex-col space-y-6">
                 {navItems.map((item) => (
-                  <div key={item.name} onClick={() => setMenuOpen(false)}>
+                  <div key={item.name} onClick={() => handleNavClick(item.href, item.name !== 'Inmobiliaria')}>
                     {item.name == 'Inmobiliaria' ? (
                       <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={false} mobileLink={true}>
                       {item.name}
@@ -175,15 +205,6 @@ function Navbar() {
                       </LinkUnderline>
                     )}
                   </div>
-
-                  // <a
-                  //   key={item.name}
-                  //   href={item.href}
-                  //   onClick={() => setMenuOpen(false)}
-                  //   className="text-2xl font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300"
-                  // >
-                  //   {item.name}
-                  // </a>
                 ))}
               </nav>
             </div>

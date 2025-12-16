@@ -121,16 +121,19 @@ function MasonryGrid() {
         }, [src, direction]);
 
         return (
-            <Image
-                src={src}
-                alt={alt}
-                className={[
-                    'max-w-[90vw] max-h-[80vh] object-contain rounded-md',
-                    'transition-all duration-300 ease-out',
-                    entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'
-                ].join(' ')}
-                draggable={false}
-            />
+            <div className="relative w-[90vw] h-[80vh]">
+                <Image
+                    src={src}
+                    alt={alt}
+                    fill
+                    className={[
+                        'object-contain rounded-md',
+                        'transition-all duration-300 ease-out',
+                        entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'
+                    ].join(' ')}
+                    draggable={false}
+                />
+            </div>
         );
     };
 
@@ -143,7 +146,10 @@ function MasonryGrid() {
                             <Image
                                 src={image.src}
                                 alt={image.alt}
-                                className='w-full object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
+                                width={800}
+                                height={600}
+                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className='w-full h-auto object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
                                 onClick={() => openAt(image.index)}
                             />
                         </div>
@@ -176,7 +182,7 @@ function MasonryGrid() {
                     <div
                         role="dialog"
                         aria-modal="true"
-                        className='fixed inset-0 bg-black/70 flex items-center justify-center z-50'
+                        className='fixed inset-0 bg-black/80 flex items-center justify-center z-50'
                         onClick={close}
                     >
                         {/* Botón de cerrar */}

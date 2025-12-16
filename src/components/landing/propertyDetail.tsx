@@ -83,10 +83,12 @@ function PropertyDetail({ propertySlugProp }: Props) {
         try {
             setIsLoading(true);
             const data = await getPropertyBySlug(propertySlugProp);
-            setPropertyData(data[0]);
-            console.log('Loaded property data:', data[0]);
-
-            setImagesData(data[0].Imagenes && data[0].Imagenes.length > 0 ? data[0].Imagenes : []);
+            if (data[0]) {
+                setPropertyData(data[0]);
+                setImagesData(data[0].Imagenes && data[0].Imagenes.length > 0 ? data[0].Imagenes : []);
+            } else {
+                setNotFound(true);
+            }
         } catch (error) {
             console.error("Error loading property data:", error);
             // Redirigir a una página de error o mostrar un mensaje
@@ -115,7 +117,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                     <div className="mb-8">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             {/* Skeleton imagen principal */}
-                            <div className="md:col-span-3 relative aspect-[16/9] rounded-2xl bg-gray-300 animate-pulse" />
+                            <div className="md:col-span-3 relative aspect-[16/9] rounded-xl bg-gray-300 animate-pulse" />
                             {/* Skeleton miniaturas */}
                             <div className="hidden md:flex flex-col gap-4">
                                 {[1, 2, 3, 4].map((i) => (
@@ -203,7 +205,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                     {/* Imagen principal */}
                                     <div
-                                        className="md:col-span-3 relative aspect-[16/9] rounded-2xl overflow-hidden cursor-pointer group"
+                                        className="md:col-span-3 relative aspect-[16/9] rounded-xl overflow-hidden cursor-pointer group"
                                         onClick={() => setShowLightbox(true)}
                                     >
                                         <Image
@@ -561,7 +563,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                             <div
                                 role="dialog"
                                 aria-modal="true"
-                                className='fixed inset-0 bg-black/90 flex items-center justify-center z-50'
+                                className='fixed inset-0 bg-black/80 flex items-center justify-center z-50'
                                 onClick={() => setShowLightbox(false)}
                             >
                                 {/* Botón de cerrar */}

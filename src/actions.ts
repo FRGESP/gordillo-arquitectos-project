@@ -117,7 +117,6 @@ export const getProjects = async () => {
         alt: `Proyecto Imagen ${image.id}`,
         index: index
     }));
-    console.log('Formatted images:', projectImages);
     return projectImages;
 }
 
