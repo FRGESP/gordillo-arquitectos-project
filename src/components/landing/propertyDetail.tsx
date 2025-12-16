@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useActionState, use } from "react";
 import Image from "next/image";
 import {
     MapPin,
@@ -14,9 +14,8 @@ import {
     ChevronRight,
 } from "lucide-react";
 import type { Property, ImageInterface } from "@/actions";
-import { getPropertyBySlug } from "@/actions";
+import { FormState, getPropertyBySlug, submitContactForm } from "@/actions";
 import RelatedProperties from "../elements/relatedProperties";
-import { useRouter } from 'next/navigation';
 import Link from "next/link";
 
 
@@ -33,7 +32,16 @@ const currency = new Intl.NumberFormat("es-MX", {
 
 function PropertyDetail({ propertySlugProp }: Props) {
 
-    const router = useRouter();
+    //Necesario para enviar correos
+    const [currentState, formAction, isPending] = useActionState<FormState, FormData>(submitContactForm, {})
+
+    //Guarda la informacion del input
+    const [inputValue, setInputValue] = useState({
+        Nombre: '',
+        Email: '',
+        Telefono: '',
+        Mensaje: '',
+    });
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showLightbox, setShowLightbox] = useState(false);
@@ -54,6 +62,9 @@ function PropertyDetail({ propertySlugProp }: Props) {
 
     //Estado de carga
     const [isLoading, setIsLoading] = useState(true);
+
+    //Controla el estado de los errores
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const isRent = propertyData?.Tipo?.toLowerCase() === "renta";
 
@@ -97,6 +108,10 @@ function PropertyDetail({ propertySlugProp }: Props) {
             setIsLoading(false);
         }
     }
+
+    useEffect(() => {
+        console.log(typeof (currentState.errors?.Nombre?.[0]));
+    }, [currentState])
 
     //Carga la información incial de la propiedad
     useEffect(() => {
@@ -423,16 +438,34 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                             <h3 className="text-xl font-bold text-gray-900 mb-4">
                                                 ¿Te interesa esta propiedad?
                                             </h3>
-                                            <form className="space-y-4">
+                                            <form action={formAction} className="space-y-4">
+                                                <input
+                                                    type="hidden"
+                                                    name="PropertySlug"
+                                                    value={propertyData?.slug || ''}
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="PropertyName"
+                                                    value={propertyData?.NombrePropiedad || ''}
+                                                />
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                                         Nombre
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                                        name="Nombre"
+                                                        className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all ${currentState.errors?.Nombre ? "border-red-500 focus:ring-red-500" : ""}`}
                                                         placeholder="Tu nombre"
+                                                        disabled={isPending}
                                                     />
+                                                    {currentState.errors?.Nombre && (
+                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                            <span>⚠</span>
+                                                            <span>{currentState.errors?.Nombre?.[0]}</span>
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <div>
@@ -441,9 +474,17 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                     </label>
                                                     <input
                                                         type="tel"
-                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                                        name="Telefono"
+                                                        className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all ${currentState.errors?.Telefono ? "border-red-500 focus:ring-red-500" : ""}`}
                                                         placeholder="(123) 456-7890"
+                                                        disabled={isPending}
                                                     />
+                                                    {currentState.errors?.Telefono && (
+                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                            <span>⚠</span>
+                                                            <span>{currentState.errors?.Telefono?.[0]}</span>
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <div>
@@ -452,9 +493,17 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                     </label>
                                                     <input
                                                         type="email"
-                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all"
+                                                        name="Email"
+                                                        className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all ${currentState.errors?.Email ? "border-red-500 focus:ring-red-500" : ""}`}
                                                         placeholder="tu@email.com"
+                                                        disabled={isPending}
                                                     />
+                                                    {currentState.errors?.Email && (
+                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                            <span>⚠</span>
+                                                            <span>{currentState.errors?.Email?.[0]}</span>
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <div>
@@ -463,17 +512,37 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                     </label>
                                                     <textarea
                                                         rows={4}
-                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all resize-none"
+                                                        name="Mensaje"
+                                                        className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy focus:border-transparent outline-none transition-all resize-none ${currentState.errors?.Mensaje ? "border-red-500 focus:ring-red-500" : ""}`}
                                                         placeholder="Me gustaría obtener más información sobre esta propiedad..."
+                                                        disabled={isPending}
                                                     />
+                                                    {currentState.errors?.Mensaje && (
+                                                        <p className="text-sm text-red-500 flex items-center gap-1">
+                                                            <span>⚠</span>
+                                                            <span>{currentState.errors?.Mensaje?.[0]}</span>
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <button
                                                     type="submit"
                                                     className="w-full bg-navy hover:bg-navy-hover text-white font-semibold py-3 rounded-lg transition-colors"
                                                 >
-                                                    Enviar mensaje
+                                                    {isPending ? "Enviando..." : "Enviar mensaje"}
                                                 </button>
+
+                                                {currentState?.success === true && currentState.message && (
+                                                    <p className="text-center text-green-600 text-sm mt-2">
+                                                        {currentState.message}
+                                                    </p>
+                                                )}
+
+                                                {currentState.error && (
+                                                    <p className="text-center text-red-600 text-sm mt-2">
+                                                        {currentState.error}
+                                                    </p>
+                                                )}
                                             </form>
 
                                             <div className="mt-6 pt-6 border-t border-gray-200">
@@ -501,7 +570,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                         445-450-3606
                                                     </a>
                                                     <a
-                                                        href="https://wa.me/524454503606"
+                                                        href="https://wa.me/4454503606"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
