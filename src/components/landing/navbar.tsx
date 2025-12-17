@@ -1,66 +1,239 @@
 'use client';
-import { InstagramLogo, FacebookLogo, WhatsappLogo } from 'phosphor-react';
+import { useEffect, useState } from 'react';
+import { InstagramLogo, FacebookLogo, WhatsappLogo, List, X } from 'phosphor-react';
+import LinkUnderline from '../elements/linkUnderline';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
-    const navItems = [
-        { name: "Inicio", href: "/" },
-        { name: "Servicios", href: "/services" },
-        { name: "Proyectos", href: "/projects" },
-        { name: "Inmobiliaria", href: "/inmobiliaria" },
-    ]
+  useEffect(() => {
+      if (pathname === '/') {
+        const onScroll = () => setScrolled(window.scrollY > 10);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => window.removeEventListener('scroll', onScroll);
+      } else {
+        setScrolled(true);
+      }
+    }, [pathname]);
 
-    const socialLinks = [
-        { name: "Facebook", href: "https://www.facebook.com/gordilloarquitectos", img: <FacebookLogo size={32} className='transition-transform hover:scale-110 text-black hover:text-blue-800 duration-300'/> },
-        { name: "Instagram", href: "https://www.instagram.com/gordilloarquitectos", img: <InstagramLogo size={32} className='transition-transform hover:scale-110 text-black hover:text-pink-700 duration-300'/> },
-        { name: "WhatsApp", href: "https://wa.me/1234567890", img: <WhatsappLogo size={32} className='transition-transform hover:scale-110 text-black hover:text-[#25D366] duration-300'/> },
-    ];
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    const original = document.body.style.overflow;
+    if (menuOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = original || '';
+    return () => {
+      document.body.style.overflow = original || '';
+    };
+  }, [menuOpen]);
 
-    return (
-        <nav className='fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border border-gray-200 shadow-sm'>
-            <div className='container mx-auto '>
-                <div className='flex items-center justify-between h-16'>
-                    <div className='flex items-center'>
-                        <img src="/assets/images/logo.png" alt="Gordillo Arquitectos" width={50}/>
-                        <h1 className='text-2xl tracking-tight'><span className='font-semibold'>Gordillo</span> Arquitectos</h1>
-                    </div>
+  // Handle scroll on mount if hash is present
+  useEffect(() => {
+    if (pathname === '/' && window.location.hash) {
+      const hash = window.location.hash.slice(1);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [pathname]);
 
-                    {/* Desktop Navigation */}
-                    <div className='hidden md:block'>
-                        <div className='ml-10 flex items-center space-x-8'>
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className='text-black hover:text-blue-800 transition-colors duration-300 font-semibold'
-                                >
-                                    {item.name}
-                                </a>
-                            ))}
+  const handleNavClick = (href: string, isNavbarLink: boolean) => {
+    setMenuOpen(false);
+    
+    if (isNavbarLink) {
+      if (pathname === '/') {
+        const element = document.getElementById(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        router.push(`/#${href}`);
+      }
+    }
+  };
 
-                            <span className='text-gray-800 font-semibold'>|</span>
-                            <div className='flex items-center space-x-4'>
+  const navItems = [
+    { name: 'Inicio', href: 'inicio' },
+    { name: 'Servicios', href: 'servicios' },
+    { name: 'Proyectos', href: 'proyectos' },
+    { name: 'Inmobiliaria', href: '/inmobiliaria' },
+  ];
 
-                                {socialLinks.map((link) => (
-                                    <a
-                                        key={link.name}
-                                        href={link.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {link.img}
-                                    </a>
-                                ))}
+  const socialLinks = [
+    {
+      name: 'Facebook',
+      href: 'https://www.facebook.com/share/1GUooxGK6o/',
+      img: (
+        <FacebookLogo
+          size={32}
+          className={`transition-transform hover:scale-110 ${scrolled || menuOpen ? 'text-black hover:text-[#1877f2]' : 'text-white'}  duration-300`}
+        />
+      ),
+    },
+    {
+      name: 'Instagram',
+      href: 'https://www.instagram.com/gordilloarquitectos',
+      img: (
+        <InstagramLogo
+          size={32}
+          className={`transition-transform hover:scale-110  ${scrolled || menuOpen ? 'text-black hover:text-[#D43089]' : 'text-white'}  duration-300`}
+        />
+      ),
+    },
+    {
+      name: 'WhatsApp',
+      href: 'https://wa.me/524454503606',
+      img: (
+        <WhatsappLogo
+          size={32}
+          className={`transition-transform hover:scale-110  ${scrolled || menuOpen ? 'text-black hover:text-[#25D366]' : 'text-white'}  duration-300`}
+        />
+      ),
+    },
+  ];
 
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
+  return (
+    <>
+      {/* Top navbar */}
+      <nav
+        className={[
+          'fixed top-0 left-0 right-0 z-50 transition-colors duration-300',
+          scrolled || menuOpen
+            ? 'bg-white/95 backdrop-blur-sm border border-gray-200 shadow-sm'
+            : 'bg-transparent border-transparent',
+        ].join(' ')}
+      >
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center ml-3 md:ml-0 cursor-pointer" onClick={() => {router.push('/'); setMenuOpen(false);}}>
+              <img src={`/assets/images/${scrolled ? 'blackLogo.webp' : 'whiteLogo.webp'}`} alt="Gordillo Arquitectos" width={25} />
+              <h1 className={`ml-2 text-2xl tracking-tight ${scrolled ? 'text-black' : 'text-white'}`}>
+                <span className="font-semibold">Gordillo</span> Arquitectos
+              </h1>
             </div>
-        </nav>
-    )
+
+            {/* Desktop nav */}
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-center space-x-8">
+                {navItems.map((item) => (
+                  (item.name == 'Inmobiliaria') ? (
+                    <LinkUnderline key={item.name} href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={false}>
+                    {item.name}
+                  </LinkUnderline>
+                  ) : (
+                    <div key={item.name} onClick={() => handleNavClick(item.href, true)}>
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true}>
+                        {item.name}
+                      </LinkUnderline>
+                    </div>
+                  )
+                ))}
+                <span className={`${scrolled || menuOpen ? 'text-black' : 'text-white'} font-semibold`}>|</span>
+                <div className="flex items-center space-x-4">
+                  {socialLinks.map((link) => (
+                    <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer">
+                      {link.img}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile hamburger */}
+            <div className="md:hidden flex items-center">
+              <button
+                aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((o) => !o)}
+                className={`p-2 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ${scrolled || menuOpen ? 'text-black focus:ring-black' : 'text-white focus:ring-white'}`}
+              >
+                {menuOpen ? <X size={32} weight="bold" /> : <List size={32} weight="bold" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Fullscreen right-to-left drawer for mobile */}
+      <div className={`md:hidden fixed inset-0 z-50 ${menuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        {/* Backdrop */}
+        <div
+          aria-hidden="true"
+          onClick={() => setMenuOpen(false)}
+          className={`absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-500 ease-in-out ${menuOpen ? 'opacity-100' : 'opacity-0'}`}
+        />
+        {/* Drawer */}
+        <aside
+          className={`absolute top-0 right-0 h-full w-full bg-white transform transition-transform duration-500 ease-in-out ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Drawer header */}
+            <div className="flex items-center justify-between px-1 h-16 border-b border-gray-200">
+              <div className="flex items-center ml-3 cursor-pointer" onClick={() => {router.push('/'); setMenuOpen(false);}}>
+                <img src="/assets/images/blackLogo.webp" alt="Gordillo Arquitectos" width={25} height={25} />
+                <p className='ml-2 text-2xl'><span className="font-semibold">Gordillo</span> Arquitectos</p>
+              </div>
+              <button
+                aria-label="Cerrar menú"
+                onClick={() => setMenuOpen(false)}
+                className="p-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black"
+              >
+                <X size={28} weight="bold" />
+              </button>
+            </div>
+
+            {/* Drawer content */}
+            <div className="flex overflow-y-auto px-6 py-8">
+              <nav className="flex flex-col space-y-6">
+                {navItems.map((item) => (
+                  <div key={item.name} onClick={() => handleNavClick(item.href, item.name !== 'Inmobiliaria')}>
+                    {item.name == 'Inmobiliaria' ? (
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={false} mobileLink={true}>
+                      {item.name}
+                    </LinkUnderline>
+                    ) : (
+                      <LinkUnderline href={item.href} scrolledProp={scrolled || menuOpen} navbarLink={true} mobileLink={true}>
+                        {item.name}
+                      </LinkUnderline>
+                    )}
+                  </div>
+                ))}
+              </nav>
+            </div>
+
+            {/* Drawer footer */}
+            <div className="px-6 py-4 border-t border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transform hover:-translate-y-0.5 transition-transform"
+                  >
+                    {link.img}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div className='flex-1'
+              onClick={() => setMenuOpen(false)}
+            >
+            </div>
+          </div>
+        </aside>
+      </div>
+    </>
+  );
 }
 
-export default Navbar
+export default Navbar;

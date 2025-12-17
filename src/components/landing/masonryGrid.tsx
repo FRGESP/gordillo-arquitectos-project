@@ -1,5 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
+import { getProjects } from '@/actions';
+import Image from 'next/image';
+
 
 interface ImageInterface {
     src: string;
@@ -7,27 +10,53 @@ interface ImageInterface {
     index: number;
 }
 
-const images: ImageInterface[] = [
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 0 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 1 },
-    { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 2 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 3 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 4 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 5 },
-    { src: "/assets/images/pipila.webp", alt: "Pipila", index: 6 },
-    { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 7 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 8 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 9 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 10 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 11 },
-    { src: "/assets/images/Casa.jpg", alt: "Casa", index: 12 },
-]
+interface ImageProjectInterface {
+    id: string;
+    url: string;
+}
+
+interface ProjectsInterface {
+    id: number;
+    Nombre: string;
+    Imagen: ImageProjectInterface[];
+}
+
+// const images: ImageInterface[] = [
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 0 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 1 },
+//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 2 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 3 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 4 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 5 },
+//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 6 },
+//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 7 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 8 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 9 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 10 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 11 },
+//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 12 },
+// ]
 
 function MasonryGrid() {
+    const [images, setImages] = useState<ImageInterface[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
     const [direction, setDirection] = useState<1 | -1>(1); // 1: next, -1: prev
     const [isExpanded, setIsExpanded] = useState(false);
+
+    const getProjectsData = async () => {
+        const projectsImages = await getProjects();
+
+        console.log('Projects fetched:', projectsImages);
+
+        setImages(projectsImages);
+
+    }
+
+
+    useEffect(() => {
+        getProjectsData();
+},[])
 
     const openAt = (index: number) => {
         setCurrentIndex(index);
@@ -92,29 +121,35 @@ function MasonryGrid() {
         }, [src, direction]);
 
         return (
-            <img
-                src={src}
-                alt={alt}
-                className={[
-                    'max-w-[90vw] max-h-[80vh] object-contain rounded-md',
-                    'transition-all duration-300 ease-out',
-                    entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'
-                ].join(' ')}
-                draggable={false}
-            />
+            <div className="relative w-[90vw] h-[80vh]">
+                <Image
+                    src={src}
+                    alt={alt}
+                    fill
+                    className={[
+                        'object-contain rounded-md',
+                        'transition-all duration-300 ease-out',
+                        entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'
+                    ].join(' ')}
+                    draggable={false}
+                />
+            </div>
         );
     };
 
     return (
-        <section>
+        <section className=''>
             <div className={`p-3 relative container mx-auto ${!isExpanded ? 'max-h-[250vh] md:max-h-[80vh] overflow-y-hidden' : 'max-h-none'}`}>
                 <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4'>
                     {images.map((image) => (
                         <div key={image.index} className='mb-4 break-inside-avoid-column'>
-                            <img
+                            <Image
                                 src={image.src}
                                 alt={image.alt}
-                                className='w-full object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
+                                width={800}
+                                height={600}
+                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className='w-full h-auto object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
                                 onClick={() => openAt(image.index)}
                             />
                         </div>
@@ -122,7 +157,7 @@ function MasonryGrid() {
                 </div>
                 {!isExpanded ? (
                     <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-50 to-transparent text-center p-4'>
-                        <button className='inline-flex items-center gap-2 text-white font-semibold px-3 py-2 bg-blue-700 rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:scale-105' onClick={() => setIsExpanded(true)}>
+                        <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-secondary rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:text-white hover:scale-105' onClick={() => setIsExpanded(true)}>
                             <span>Ver más</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M6 9l6 6 6-6" />
@@ -147,7 +182,7 @@ function MasonryGrid() {
                     <div
                         role="dialog"
                         aria-modal="true"
-                        className='fixed inset-0 bg-black/70 flex items-center justify-center z-50'
+                        className='fixed inset-0 bg-black/80 flex items-center justify-center z-50'
                         onClick={close}
                     >
                         {/* Botón de cerrar */}
