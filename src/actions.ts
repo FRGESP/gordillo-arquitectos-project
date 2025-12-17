@@ -89,7 +89,7 @@ export async function submitContactForm(
 
         const { error: ownerError } = await resend.emails.send({
             from: "Gordillo Arquitectos <info@contacto.gordilloarquitectos.mx>",
-            to: ["fernandogordilloespinoza@gmail.com"],
+            to: ["fernandogordilloortega@gmail.com"],
             subject: `Interés en propiedad Página Web: ${validatedFields.data.PropertyName}`,
             html: `<h2>Nuevo mensaje de contacto para propiedad: ${validatedFields.data.PropertyName}</h2>
                     <p><strong>Propiedad de interés:</strong> ${validatedFields.data.PropertyName}</p>

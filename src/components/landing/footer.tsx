@@ -22,7 +22,7 @@ function Footer() {
 
     const contactInfo = [
         { icon: MapPin, text: 'Pípila 706, Moroleón Gto.', href: 'https://maps.app.goo.gl/gGrwqi2FtsUs3kzr6', title: "Dirección" },
-        { icon: Phone, text: '4454503606', href: 'tel:4454503606', title: "Teléfono" },
+        { icon: Phone, text: '445 450 3606', href: 'tel:4454503606', title: "Teléfono" },
         { icon: Mail, text: 'fernandogordilloortega@gmail.com', href: 'mailto:fernandogordilloortega@gmail.com', title: "Correo" },
     ]
 

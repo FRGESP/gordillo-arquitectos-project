@@ -50,8 +50,8 @@ function PropertyCard({ property }: Props) {
           <h3 className="line-clamp-1 text-lg font-semibold text-gray-900">
             {property.NombrePropiedad}
           </h3>
-          <div className="shrink-0 font-bold text-navy-dark">
-            {currency.format(property.Precio)}{property.Tipo == 'Renta' ? '/mes' : ''}
+          <div className="shrink-0 font-bold text-navy">
+            {currency.format(property.Precio)} <span className="text-gray-500">{property.Tipo === 'Renta' ? '/mes' : ''}</span>
           </div>
         </div>
 
