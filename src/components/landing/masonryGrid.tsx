@@ -21,42 +21,34 @@ interface ProjectsInterface {
     Imagen: ImageProjectInterface[];
 }
 
-// const images: ImageInterface[] = [
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 0 },
-//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 1 },
-//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 2 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 3 },
-//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 4 },
-//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 5 },
-//     { src: "/assets/images/pipila.webp", alt: "Pipila", index: 6 },
-//     { src: "/assets/images/interiorPipila.jpg", alt: "Interior Pipila", index: 7 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 8 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 9 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 10 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 11 },
-//     { src: "/assets/images/Casa.jpg", alt: "Casa", index: 12 },
-// ]
-
 function MasonryGrid() {
     const [images, setImages] = useState<ImageInterface[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
     const [direction, setDirection] = useState<1 | -1>(1); // 1: next, -1: prev
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getProjectsData = async () => {
+        setIsLoading(true);
         const projectsImages = await getProjects();
 
-        console.log('Projects fetched:', projectsImages);
-
         setImages(projectsImages);
-
+        setIsLoading(false);
     }
 
 
     useEffect(() => {
         getProjectsData();
 },[])
+    
+    // Skeleton component with predefined heights to avoid hydration errors
+    const skeletonHeights = [250, 300, 350, 280, 320, 270, 290, 310];
+    const SkeletonCard = ({ index }: { index: number }) => (
+        <div className='mb-4 break-inside-avoid-column'>
+            <div className='w-full rounded-lg bg-gray-200 animate-pulse' style={{height: `${skeletonHeights[index % skeletonHeights.length]}px`}}></div>
+        </div>
+    )
 
     const openAt = (index: number) => {
         setCurrentIndex(index);
@@ -141,21 +133,26 @@ function MasonryGrid() {
         <section className=''>
             <div className={`p-3 relative container mx-auto ${!isExpanded ? 'max-h-[250vh] md:max-h-[80vh] overflow-y-hidden' : 'max-h-none'}`}>
                 <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4'>
-                    {images.map((image) => (
-                        <div key={image.index} className='mb-4 break-inside-avoid-column'>
-                            <Image
-                                src={image.src}
-                                alt={image.alt}
-                                width={800}
-                                height={600}
-                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                className='w-full h-auto object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
-                                onClick={() => openAt(image.index)}
-                            />
-                        </div>
-                    ))}
+                    {isLoading ? (
+                        // Skeleton loader
+                        Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} index={i} />)
+                    ) : (
+                        images.map((image) => (
+                            <div key={image.index} className='mb-4 break-inside-avoid-column'>
+                                <Image
+                                    src={image.src}
+                                    alt={image.alt}
+                                    width={800}
+                                    height={600}
+                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                    className='w-full h-auto object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
+                                    onClick={() => openAt(image.index)}
+                                />
+                            </div>
+                        ))
+                    )}
                 </div>
-                {!isExpanded ? (
+                {!isLoading && !isExpanded && images.length > 4 ? (
                     <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-50 to-transparent text-center p-4'>
                         <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-secondary rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:text-white hover:scale-105' onClick={() => setIsExpanded(true)}>
                             <span>Ver más</span>
@@ -164,7 +161,7 @@ function MasonryGrid() {
                             </svg>
                         </button>
                     </div>
-                ) : (
+                ) : !isLoading && images.length > 4 ? (
                     <div className='w-full text-center p-4'>
                         <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-gray-300 rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-gray-400 hover:scale-105' onClick={() => setIsExpanded(false)}>
                             <span>Ver menos</span>
@@ -173,7 +170,7 @@ function MasonryGrid() {
                             </svg>
                         </button>
                     </div>
-                )}
+                ) : null}
             </div>
 
             {/* Modal */}

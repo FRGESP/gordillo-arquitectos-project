@@ -26,9 +26,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://gordilloarquitectos.mx",
   },
-  
+
   title: "Gordillo Arquitectos - Constructora en Guanajuato",
-  description: "Expertos en diseño arquitectónico y construcción de alta calidad en Guanajuato. Convertimos tus proyectos en realidades sólidas y vanguardistas.",
+  description: "Gordillo Arquitectos, despacho de arquitectura y constructora en Guanajuato, especializado en diseño arquitectónico y construcción de proyectos residenciales y comerciales con calidad e innovación.",
   icons: {
     icon: [
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   // Facebook / Open Graph
   openGraph: {
     title: "Gordillo Arquitectos",
-    description: "Expertos en diseño arquitectónico y construcción de alta calidad en Guanajuato. Convertimos tus proyectos en realidades sólidas y vanguardistas.",
+    description: "Gordillo Arquitectos, despacho de arquitectura y constructora en Guanajuato, especializado en diseño arquitectónico y construcción de proyectos residenciales y comerciales con calidad e innovación.",
     url: "https://gordilloarquitectos.mx",
     siteName: "Gordillo Arquitectos",
     images: [
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Gordillo Arquitectos",
-    description: "Expertos en diseño arquitectónico y construcción de alta calidad en Guanajuato. Convertimos tus proyectos en realidades sólidas y vanguardistas.",
+    description: "Gordillo Arquitectos, despacho de arquitectura y constructora en Guanajuato, especializado en diseño arquitectónico y construcción de proyectos residenciales y comerciales con calidad e innovación.",
     images: ["/web-app-manifest-512x512.png"],
   },
 
