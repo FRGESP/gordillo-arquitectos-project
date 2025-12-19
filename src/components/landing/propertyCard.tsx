@@ -17,8 +17,6 @@ function PropertyCard({ property }: Props) {
   const img = property.Imagenes?.[0];
   const isRent = property.Tipo?.toLowerCase() === 'renta';
 
-  console.log('Property in PropertyCard:', property);
-
   return (
     <Link 
       href={`/inmobiliaria/${property.slug}`} 

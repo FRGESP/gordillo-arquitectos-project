@@ -141,7 +141,7 @@ export async function submitContactForm(
 function getImageUrl(url: string | undefined): string {
   if (!url) return '';
   if (url.startsWith('http')) return url;
-  return `${process.env.STRAPI_URL}${url}`;
+  return `${process.env.IMAGE_STRAPI_URL}${url}`;
 }
 
 const GetPropertiesImage = (images: ImageInterface[]) => {
@@ -169,7 +169,8 @@ const GetPropertiesImages = (images: ImageInterface[]) => {
 
 //Inmobiliaria API fetch
 export const getProperties = async () => {
-    const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Precio,Recamaras,Bathrooms,Direccion,AreaTerreno,AreaConstruccion,slug,Tipo&populate[Imagenes][fields][0]=url&sort=updatedAt:desc`);
+    try {
+        const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Precio,Recamaras,Bathrooms,Direccion,AreaTerreno,AreaConstruccion,slug,Tipo&populate[Imagenes][fields][0]=url&sort=updatedAt:desc`);
     const { data } = response.data;
 
     const properties: Property[] = data.map((property: Property) => {
@@ -193,12 +194,17 @@ export const getProperties = async () => {
     });
 
     return properties;
+    } catch (error) {
+        console.error("Error fetching properties:", error);
+        return [];
+    }
 }
 
 
 //Projects API fetch
 export const getProjects = async () => {
-    const response = await axios.get(`${API_URL}/proyectos?populate[Imagen][fields][0]=url&[fields][0]=Nombre`);
+    try {
+        const response = await axios.get(`${API_URL}/proyectos?populate[Imagen][fields][0]=url&[fields][0]=Nombre`);
     const { data } = response.data;
 
     const projects: ProjectsInterface[] = data;
@@ -214,11 +220,16 @@ export const getProjects = async () => {
         index: index
     }));
     return projectImages;
+    } catch (error) {
+        console.error("Error fetching projects:", error);
+        return [];
+    }
 }
 
 // Get property Details by slug
 export const getPropertyBySlug = async (slug: string) => {
-    const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Descripcion,Precio,Direccion,AreaTerreno,AreaConstruccion,Bathrooms,Recamaras,slug,Tipo,LinkGoogleMaps,LinkMapaGoogleMaps&populate[Imagenes][fields][0]=url&sort=updatedAt:desc&populate=Caracteristicas&filters[slug][$eq]=${slug}`);
+    try {
+        const response = await axios.get(`${API_URL}/propiedades?fields=updatedAt,id,NombrePropiedad,Descripcion,Precio,Direccion,AreaTerreno,AreaConstruccion,Bathrooms,Recamaras,slug,Tipo,LinkGoogleMaps,LinkMapaGoogleMaps&populate[Imagenes][fields][0]=url&sort=updatedAt:desc&populate=Caracteristicas&filters[slug][$eq]=${slug}`);
     const { data } = response.data;
 
     const properties: Property[] = data.map((property: Property) => {
@@ -250,6 +261,10 @@ export const getPropertyBySlug = async (slug: string) => {
     });
 
     return properties;
+    } catch (error) {
+        console.error("Error fetching property by slug:", error);
+        return [];
+    }
 }
 
 export async function getRelatedProperties(

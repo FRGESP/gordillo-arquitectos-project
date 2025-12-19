@@ -13,6 +13,24 @@ function ServiceContent({ serviceName }: ServiceContentProps) {
     const otherServ2 = serv?.otherServices ? servicesData.find(s => s.slug === serv.otherServices?.[1]) : null;
     const otherServ3 = serv?.otherServices ? servicesData.find(s => s.slug === serv.otherServices?.[2]) : null;
 
+    // Si no se encuentra el servicio, mostrar mensaje de not found
+    if (!serv) {
+        return (
+            <section className='bg-gray-50 min-h-screen'>
+                <div className="flex flex-col items-center justify-center h-screen text-center px-4">
+                    <h1 className="text-5xl font-bold mb-4 text-navy">Servicio no encontrado</h1>
+                    <p className="text-lg mb-6 text-gray-700">Lo sentimos, el servicio que buscas no está disponible.</p>
+                    <Link
+                        href="/#servicios"
+                        className="px-6 py-3 bg-navy text-white rounded-full font-bold hover:bg-blue-700 transition-colors shadow-lg"
+                    >
+                        Volver a servicios
+                    </Link>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className='bg-gray-50 py-24'>
             <div className="px-4 sm:px-6 lg:px-8 bg-gray-50">

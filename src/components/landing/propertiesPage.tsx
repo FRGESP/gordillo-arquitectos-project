@@ -82,6 +82,7 @@ function PropertiesPage() {
                 placeholder="Busca por nombre de propiedad..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                autoComplete="off"
               />
             </div>
 
@@ -153,6 +154,50 @@ function PropertiesPage() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="mt-12 text-center py-16">
+            <svg 
+              className="mx-auto h-24 w-24 text-gray-300 mb-4" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={1.5} 
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
+              />
+            </svg>
+            <h3 className="text-2xl font-semibold text-navy mb-2">
+              No hay propiedades disponibles
+            </h3>
+            <p className="text-stone-dark max-w-md mx-auto">
+              Actualmente no hay propiedades en nuestro catálogo. Por favor, vuelve más tarde o contáctanos para más información.
+            </p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="mt-12 text-center py-16">
+            <svg 
+              className="mx-auto h-24 w-24 text-gray-300 mb-4" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={1.5} 
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+              />
+            </svg>
+            <h3 className="text-2xl font-semibold text-navy mb-2">
+              No se encontraron resultados
+            </h3>
+            <p className="text-stone-dark max-w-md mx-auto">
+              No hay propiedades que coincidan con tu búsqueda. Intenta ajustar los filtros o realiza una nueva búsqueda.
+            </p>
           </div>
         ) : (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
