@@ -138,11 +138,17 @@ export async function submitContactForm(
     }
 }
 
+function getImageUrl(url: string | undefined): string {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return `${process.env.STRAPI_URL}${url}`;
+}
+
 const GetPropertiesImage = (images: ImageInterface[]) => {
 
     const firstImage = images[0];
     const result = [{
-        src: `${STRAPI_URL}${firstImage.url}`,
+        src: getImageUrl(firstImage.url),
         alt: `Propiedad Imagen ${firstImage.id}`,
         index: firstImage.id
     }];
@@ -153,7 +159,7 @@ const GetPropertiesImage = (images: ImageInterface[]) => {
 const GetPropertiesImages = (images: ImageInterface[]) => {
 
     const result = images.map(image => ({
-        src: `${STRAPI_URL}${image.url}`,
+        src: getImageUrl(image.url),
         alt: `Propiedad Imagen ${image.id}`,
         index: image.id
     }));
@@ -189,6 +195,7 @@ export const getProperties = async () => {
     return properties;
 }
 
+
 //Projects API fetch
 export const getProjects = async () => {
     const response = await axios.get(`${API_URL}/proyectos?populate[Imagen][fields][0]=url&[fields][0]=Nombre`);
@@ -202,7 +209,7 @@ export const getProjects = async () => {
 
     // Mapear a formato esperado por MasonryGrid
     const projectImages = allImages.map((image, index) => ({
-        src: `${STRAPI_URL}${image.url}`,
+        src: getImageUrl(image.url),
         alt: `Proyecto Imagen ${image.id}`,
         index: index
     }));

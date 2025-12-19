@@ -8,7 +8,6 @@ import Contact from "@/components/landing/contact";
 function Landing() {
   return (
     <div>
-      <Navbar />
       <Hero />
       <ServicesGrid />
       <Process />
