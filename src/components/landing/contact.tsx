@@ -76,7 +76,7 @@ function Contact() {
                                 Ubicación
                             </p>
                             <div className=' w-full h-[30vh] md:h-full mt-6'>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3745.981664992285!2d-101.19520062406086!3d20.13481251788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842cfba76d092c4d%3A0xb75d683f3393d568!2sGORDILLO%20ARQUITECTOS!5e0!3m2!1ses-419!2smx!4v1756599682660!5m2!1ses-419!2smx" className='w-full h-full rounded-lg' allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3745.981664992285!2d-101.19520062406086!3d20.13481251788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842cfba76d092c4d%3A0xb75d683f3393d568!2sGORDILLO%20ARQUITECTOS!5e0!3m2!1ses-419!2smx!4v1756599682660!5m2!1ses-419!2smx" className='w-full h-full rounded-lg' allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={"GORDILLO ARQUITECTOS Location"}></iframe>
                             </div>
                         </div>
                     </div>

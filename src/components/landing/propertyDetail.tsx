@@ -444,6 +444,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                 loading="lazy"
                                                 referrerPolicy="no-referrer-when-downgrade"
                                                 className="absolute inset-0"
+                                                title={propertyData?.NombrePropiedad || "Ubicación de la propiedad"}
                                             />
                                         </div>
                                         <div className="mt-4 flex items-start gap-2 text-gray-600">
