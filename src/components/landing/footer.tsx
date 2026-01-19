@@ -98,7 +98,7 @@ function Footer() {
                 {/* Línea inferior */}
                 <div className="border-t border-gray-200 pt-6 mt-10">
                     <div className='flex justify-center flex-col md:flex-row md:space-x-2 text-gray-500  text-center'>
-                        <p>© 2025 Gordillo Arquitectos.</p>
+                        <p>© 2026 Gordillo Arquitectos.</p>
                         <p className=''>Desarrollado por <a href="https://blackwaves.tech" target="_blank" rel="noopener noreferrer" className='text-navy hover:underline'>Blackwaves</a>.</p>
                     </div>
                 </div>
