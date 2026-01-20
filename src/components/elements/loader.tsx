@@ -17,7 +17,7 @@ const LoadingAnimation = () => {
           autoplay={true}
         />
       </div>
-      {/* <p className="text-gray-500 text-xl tracking-widest uppercase animate-pulse">
+      {/* <p className="text-gray-500 text-xl tracking-widest uppercase animate-pulse ">
         Cargando...
       </p> */}
     </div>
