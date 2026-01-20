@@ -1,55 +1,46 @@
 'use client'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getProjects } from '@/actions';
 import Image from 'next/image';
 
-
+// 1. Actualizamos la interfaz para incluir Título y Categoría (necesarios para el diseño)
 interface ImageInterface {
     src: string;
     alt: string;
+    title?: string; // Nuevo: Nombre del proyecto
+    category?: string; // Nuevo: Tipo de proyecto (ej. "Residencial")
     index: number;
-}
-
-interface ImageProjectInterface {
-    id: string;
-    url: string;
-}
-
-interface ProjectsInterface {
-    id: number;
-    Nombre: string;
-    Imagen: ImageProjectInterface[];
 }
 
 function MasonryGrid() {
     const [images, setImages] = useState<ImageInterface[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-    const [direction, setDirection] = useState<1 | -1>(1); // 1: next, -1: prev
+    const [direction, setDirection] = useState<1 | -1>(1);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const getProjectsData = async () => {
         setIsLoading(true);
         const projectsImages = await getProjects();
-
+        // Asegúrate de que tu función getProjects devuelva 'title' y 'category'
+        // si no, puedes mapearlo aquí provisionalmente.
         setImages(projectsImages);
         setIsLoading(false);
     }
 
-
     useEffect(() => {
         getProjectsData();
-},[])
-    
-    // Skeleton component with predefined heights to avoid hydration errors
-    const skeletonHeights = [250, 300, 350, 280, 320, 270, 290, 310];
-    const SkeletonCard = ({ index }: { index: number }) => (
-        <div className='mb-4 break-inside-avoid-column'>
-            <div className='w-full rounded-lg bg-gray-200 animate-pulse' style={{height: `${skeletonHeights[index % skeletonHeights.length]}px`}}></div>
+    }, [])
+
+    // Skeleton actualizado para ser CUADRADO como el nuevo diseño
+    const SkeletonCard = () => (
+        <div className='relative aspect-square w-full'>
+            <div className='absolute inset-0 rounded-lg bg-gray-200 animate-pulse'></div>
         </div>
     )
 
+    // ... (Lógica del modal se mantiene igual: openAt, close, showNext, showPrev) ...
     const openAt = (index: number) => {
         setCurrentIndex(index);
         setDirection(1);
@@ -77,21 +68,13 @@ function MasonryGrid() {
         });
     };
 
-    // Bloquear scroll cuando el modal está abierto
+    // ... (UseEffects de scroll y teclado se mantienen igual) ...
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-
-        // Cleanup al desmontar el componente
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
+        if (isOpen) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'unset';
+        return () => { document.body.style.overflow = 'unset'; };
     }, [isOpen]);
 
-    // Navegación por teclado
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
             if (!isOpen) return;
@@ -103,7 +86,7 @@ function MasonryGrid() {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [isOpen]);
 
-    // Componente para aplicar deslizado suave al cambiar de imagen
+    // SlideImage se mantiene igual...
     const SlideImage: React.FC<{ src: string; alt: string; direction: 1 | -1 }> = ({ src, alt, direction }) => {
         const [entered, setEntered] = useState(false);
         useEffect(() => {
@@ -111,18 +94,13 @@ function MasonryGrid() {
             const r = requestAnimationFrame(() => setEntered(true));
             return () => cancelAnimationFrame(r);
         }, [src, direction]);
-
         return (
             <div className="relative w-[90vw] h-[80vh]">
                 <Image
                     src={src}
                     alt={alt}
                     fill
-                    className={[
-                        'object-contain rounded-md',
-                        'transition-all duration-300 ease-out',
-                        entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'
-                    ].join(' ')}
+                    className={['object-contain rounded-md', 'transition-all duration-300 ease-out', entered ? 'opacity-100 translate-x-0' : direction === 1 ? 'opacity-0 translate-x-10' : 'opacity-0 -translate-x-10'].join(' ')}
                     draggable={false}
                 />
             </div>
@@ -131,100 +109,74 @@ function MasonryGrid() {
 
     return (
         <section className=''>
-            <div className={`p-3 relative container mx-auto ${!isExpanded ? 'max-h-[250vh] md:max-h-[80vh] overflow-y-hidden' : 'max-h-none'}`}>
-                <div className='columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4'>
+            {/* <div className={`md:p-3 relative container mx-auto ${!isExpanded ? ' overflow-y-hidden md:max-h-none' : 'max-h-none'}`}> */}
+            <div className={` relative container mx-auto`}>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     {isLoading ? (
-                        // Skeleton loader
-                        Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} index={i} />)
+                        Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)
                     ) : (
                         images.map((image) => (
-                            <div key={image.index} className='mb-4 break-inside-avoid-column'>
+                            <div
+                                key={image.index}
+                                className='group relative aspect-square w-full overflow-hidden cursor-pointer rounded-lg'
+                                onClick={() => openAt(image.index)}
+                            >
+                                {/* Imagen de fondo */}
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
-                                    width={800}
-                                    height={600}
-                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                    className='w-full h-auto object-cover rounded-lg transition duration-200 hover:scale-105 cursor-pointer'
-                                    onClick={() => openAt(image.index)}
+                                    fill // Ocupa todo el contenedor padre
+                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                                    className='object-cover transition-transform duration-700 ease-in-out group-hover:scale-110'
                                 />
+
+                                {/* Capa Oscura + Texto (Overlay) */}
+                                {/* <div className='absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                                    <h3 className='text-xl font-bold text-white tracking-widest uppercase text-center px-4'>
+                                        {image.title || "Nombre del Proyecto"}
+                                    </h3>
+                                    <p className='mt-2 text-sm text-gray-300 uppercase tracking-wider'>
+                                        {image.category || "Categoría"}
+                                    </p>
+                                </div> */}
                             </div>
                         ))
                     )}
                 </div>
-                {!isLoading && !isExpanded && images.length > 4 ? (
-                    <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-50 to-transparent text-center p-4'>
-                        <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-secondary rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-blue-800 hover:text-white hover:scale-105' onClick={() => setIsExpanded(true)}>
-                            <span>Ver más</span>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M6 9l6 6 6-6" />
-                            </svg>
+                {/* ------------------------------------- */}
+
+                {/* {!isLoading && !isExpanded && images.length > 7 ? (
+                    <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white/80 to-transparent pt-20 pb-4 text-center z-10 md:hidden'>
+                        <button className='inline-flex items-center gap-2 text-white font-semibold px-6 py-3 bg-black rounded-full cursor-pointer transition hover:bg-gray-800' onClick={() => setIsExpanded(true)}>
+                            <span>Ver todos los proyectos</span>
                         </button>
                     </div>
-                ) : !isLoading && images.length > 4 ? (
-                    <div className='w-full text-center p-4'>
-                        <button className='inline-flex items-center gap-2 text-black font-semibold px-3 py-2 bg-gray-300 rounded-xl cursor-pointer transition duration-200 ease-in-out hover:bg-gray-400 hover:scale-105' onClick={() => setIsExpanded(false)}>
+                ) : !isLoading && isExpanded ? (
+                    <div className='w-full text-center p-8'>
+                        <button className='inline-flex items-center gap-2 text-gray-600 font-semibold hover:text-black' onClick={() => setIsExpanded(false)}>
                             <span>Ver menos</span>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className='rotate-180'>
-                                <path d="M6 9l6 6 6-6" />
-                            </svg>
                         </button>
                     </div>
-                ) : null}
+                ) : null} */}
             </div>
 
-            {/* Modal */}
+            {/* Modal (Sin cambios mayores, solo asegurando que funcione) */}
             <div className={`${isOpen ? '' : 'hidden'}`}>
                 {currentIndex !== null && (
-                    <div
-                        role="dialog"
-                        aria-modal="true"
-                        className='fixed inset-0 bg-black/80 flex items-center justify-center z-50'
-                        onClick={close}
-                    >
-                        {/* Botón de cerrar */}
-                        <button
-                            aria-label="Cerrar modal"
-                            onClick={(e) => { e.stopPropagation(); close(); }}
-                            className='absolute top-6 right-6 p-3 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer z-10'
-                        >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M18 6L6 18M6 6l12 12" />
-                            </svg>
+                    <div className='fixed inset-0 bg-black/90 flex items-center justify-center z-50' onClick={close}>
+                        <button onClick={(e) => { e.stopPropagation(); close(); }} className='absolute top-6 right-6 p-2 text-white hover:text-gray-300 z-50 hover:cursor-pointer'>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                         </button>
 
-                        {/* Contenedor de imagen (click no cierra) */}
-                        <div
-                            className='relative cursor-default'
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <SlideImage
-                                src={images[currentIndex].src}
-                                alt={images[currentIndex].alt}
-                                direction={direction}
-                            />
+                        <div className='w-full h-full flex items-center justify-center' onClick={(e) => e.stopPropagation()}>
+                            <SlideImage src={images[currentIndex].src} alt={images[currentIndex].alt} direction={direction} />
                         </div>
 
-                        {/* Flecha Prev fija (fuera de la imagen) */}
-                        <button
-                            aria-label="Imagen anterior"
-                            onClick={(e) => { e.stopPropagation(); showPrev(); }}
-                            className='absolute left-6 md:left-8 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer'
-                        >
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M15 18l-6-6 6-6" />
-                            </svg>
+                        <button onClick={(e) => { e.stopPropagation(); showPrev(); }} className='absolute left-4 p-4 text-white hover:bg-white/10 rounded-full transition hover:cursor-pointer'>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M15 18l-6-6 6-6" /></svg>
                         </button>
-
-                        {/* Flecha Next fija (fuera de la imagen) */}
-                        <button
-                            aria-label="Imagen siguiente"
-                            onClick={(e) => { e.stopPropagation(); showNext(); }}
-                            className='absolute right-6 md:right-8 top-1/2 -translate-y-1/2 p-3 md:p-4 rounded-full bg-white/15 hover:bg-white/25 text-white backdrop-blur-md transition focus:outline-none cursor-pointer'
-                        >
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M9 6l6 6-6 6" />
-                            </svg>
+                        <button onClick={(e) => { e.stopPropagation(); showNext(); }} className='absolute right-4 p-4 text-white hover:bg-white/10 rounded-full transition hover:cursor-pointer'>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M9 6l6 6-6 6" /></svg>
                         </button>
                     </div>
                 )}
