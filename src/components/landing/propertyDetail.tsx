@@ -378,7 +378,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                     <div className="text-2xl font-bold text-gray-900">
                                                         {propertyData?.Recamaras || 0}
                                                     </div>
-                                                    <div className="text-xs text-gray-500">Recámaras</div>
+                                                    <div className="text-xs text-gray-500">{propertyData?.Recamaras ? propertyData.Recamaras > 1 ? "Recámaras" : "Recámara" : "Recámara"}</div>
                                                 </div>
                                             </div>
 
@@ -388,7 +388,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                                     <div className="text-2xl font-bold text-gray-900">
                                                         {propertyData?.Bathrooms || 0}
                                                     </div>
-                                                    <div className="text-xs text-gray-500">Baños</div>
+                                                    <div className="text-xs text-gray-500">{propertyData?.Bathrooms ? propertyData.Bathrooms > 1 ? "Baños" : "Baño" : "Baño"}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -411,7 +411,8 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                     </div>
 
                                     {/* Características */}
-                                    <div className="bg-white rounded-2xl p-6 shadow-sm">
+                                    {propertyData?.Caracteristicas && propertyData.Caracteristicas.length > 0 && (
+                                        <div className="bg-white rounded-2xl p-6 shadow-sm">
                                         <h2 className="text-2xl font-bold text-gray-900 mb-4">
                                             Características
                                         </h2>
@@ -427,6 +428,7 @@ function PropertyDetail({ propertySlugProp }: Props) {
                                             ))}
                                         </div>
                                     </div>
+                                    )}
 
                                     {/* Mapa */}
                                     <div className="bg-white rounded-2xl p-6 shadow-sm">
